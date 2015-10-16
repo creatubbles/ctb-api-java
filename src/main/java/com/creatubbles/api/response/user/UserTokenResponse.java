@@ -1,4 +1,4 @@
-package com.creatubbles.api.response;
+package com.creatubbles.api.response.user;
 
 import com.creatubbles.api.core.CreatubblesResponse;
 

@@ -1,4 +1,4 @@
-package com.creatubbles.api.response;
+package com.creatubbles.api.response.auth;
 
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.CreatubblesResponse;

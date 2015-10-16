@@ -1,4 +1,4 @@
-package com.creatubbles.api.request;
+package com.creatubbles.api.request.user;
 
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.util.EndPoints;

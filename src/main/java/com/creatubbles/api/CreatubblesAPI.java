@@ -1,7 +1,8 @@
 package com.creatubbles.api;
 
-import com.creatubbles.api.response.SignUpResponse;
-import com.creatubbles.api.response.UserProfileResponse;
+import com.creatubbles.api.response.auth.SignUpResponse;
+import com.creatubbles.api.response.creator.CreateCreatorResponse;
+import com.creatubbles.api.response.user.UserProfileResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,6 +14,7 @@ public class CreatubblesAPI {
     public final static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(SignUpResponse.class, new SignUpResponse())
             .registerTypeAdapter(UserProfileResponse.class, new UserProfileResponse())
+            .registerTypeAdapter(CreateCreatorResponse.class, new CreateCreatorResponse())
             .create();
 
     public final static JerseyClient CLIENT = JerseyClientBuilder
