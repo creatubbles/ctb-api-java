@@ -6,7 +6,6 @@ import com.creatubbles.api.core.Gallery;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-// TODO Proper (de)serialization of the Gallery object to support optional params
 public class CreateUserGalleryRequest extends CreatubblesRequest {
 
     public CreateUserGalleryRequest(Gallery gallery, String accessToken) {
