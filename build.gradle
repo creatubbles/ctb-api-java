@@ -1,0 +1,44 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.ajoberstar:gradle-git:0.8.0'
+    }
+}
+
+archivesBaseName = "creatubbles-wsapi"
+group = 'com.creatubbles.api'
+description = "WS API for Creatubbles"
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+import org.ajoberstar.grgit.Grgit
+
+if (System.getenv('BUILD_NUMBER') != null) {
+    version += ".${System.getenv('BUILD_NUMBER')}"
+} else if (new File(projectDir, '.git').exists()) {
+    def repo = Grgit.open(project.file('.'))
+    version += ".${repo.log().find().abbreviatedId}"
+} else {
+    version += ".CUSTOM"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}   
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.2.4'
+    compile group: 'com.amazonaws', name:'aws-java-sdk', version: '1.10.27'
+    compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.22.1'
+}
