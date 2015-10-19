@@ -43,7 +43,17 @@ dependencies {
     compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.22.1'
 }
 
-build.dependsOn javadoc
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+build.dependsOn sourceJar, javadoc
+
+artifacts {
+    archives jar
+    archives sourceJar
+}
 
 uploadArchives {
     onlyIf {
