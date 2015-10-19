@@ -42,3 +42,14 @@ dependencies {
     compile group: 'com.amazonaws', name:'aws-java-sdk', version: '1.10.27'
     compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.22.1'
 }
+
+uploadArchives {
+    onlyIf {
+        return project.hasProperty('mavendir')
+    }
+    repositories {
+        mavenDeployer {
+            repository(url: "file://${project.mavendir}")
+        }
+    }
+}
