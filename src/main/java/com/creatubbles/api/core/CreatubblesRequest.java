@@ -45,6 +45,11 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         }
     }
 
+    public CreatubblesRequest setAccessToken(String accessToken) {
+        this.urlParameters.put("access_token", accessToken);
+        return this;
+    }
+
     public String getEndPoint() {
         return endPoint;
     }
@@ -112,6 +117,13 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         return ((response != null) || (futureResponse != null && futureResponse.isDone()));
     }
 
+    public boolean wasSuccessful() {
+        if (isDone()) {
+            return getRawResponse().getStatus() == 200;
+        }
+        return false;
+    }
+
     public void cancelRequest() {
         if (futureResponse != null & !futureResponse.isDone()) {
             futureResponse.cancel(true);
@@ -136,7 +148,9 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         Response response = getRawResponse();
         Class<? extends T> responseClass = getResponseClass();
         if (response != null && responseClass != null) {
-            return CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), responseClass);
+            T creatubblesResponse = CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), responseClass);
+            creatubblesResponse.setOriginatingRequest(this);
+            return creatubblesResponse;
         }
 
         return null;

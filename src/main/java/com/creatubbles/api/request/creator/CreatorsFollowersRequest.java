@@ -16,6 +16,20 @@ public class CreatorsFollowersRequest extends CreatubblesRequest<CreatorsFollowe
         setUrlParameter("page", String.valueOf(page));
     }
 
+    public Integer getPageNumber() {
+        try {
+            return Integer.parseInt(getUrlParameters().get("page"));
+        } catch (NumberFormatException e) {
+
+        }
+        return null;
+    }
+
+    public CreatorsFollowersRequest setPageNumber(int pageNumber) {
+        setUrlParameter("page", String.valueOf(pageNumber));
+        return this;
+    }
+
     @Override
     public Class<? extends CreatorsFollowersResponse> getResponseClass() {
         return CreatorsFollowersResponse.class;

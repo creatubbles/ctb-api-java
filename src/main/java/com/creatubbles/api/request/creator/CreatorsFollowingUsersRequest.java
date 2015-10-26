@@ -17,6 +17,20 @@ public class CreatorsFollowingUsersRequest extends CreatubblesRequest<CreatorsFo
         setUrlParameter("page", String.valueOf(page));
     }
 
+    public Integer getPageNumber() {
+        try {
+            return Integer.parseInt(getUrlParameters().get("page"));
+        } catch (NumberFormatException e) {
+
+        }
+        return null;
+    }
+
+    public CreatorsFollowingUsersRequest setPageNumber(int pageNumber) {
+        setUrlParameter("page", String.valueOf(pageNumber));
+        return this;
+    }
+
     @Override
     public Class<? extends CreatorsFollowingUsersResponse> getResponseClass() {
         return CreatorsFollowingUsersResponse.class;

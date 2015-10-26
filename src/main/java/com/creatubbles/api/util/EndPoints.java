@@ -27,6 +27,8 @@ public class EndPoints {
 
     public static final String CREATORS_CREATIONS = "creators/%s/creations.json";
 
+    public static final String SEARCH_CREATIONS = "search/creations.json";
+
     public static final String AWS_TOKEN = "sessions/aws_token.json";
 
 }

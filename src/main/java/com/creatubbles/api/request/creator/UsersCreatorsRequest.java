@@ -37,8 +37,9 @@ public class UsersCreatorsRequest extends CreatubblesRequest<UsersCreatorsRespon
         return null;
     }
 
-    public void setPageNumber(int pageNumber) {
+    public UsersCreatorsRequest setPageNumber(int pageNumber) {
         setUrlParameter("page", String.valueOf(pageNumber));
+        return this;
     }
 
     @Override
