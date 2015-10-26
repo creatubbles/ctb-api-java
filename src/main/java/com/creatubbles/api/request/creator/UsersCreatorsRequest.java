@@ -1,6 +1,8 @@
 package com.creatubbles.api.request.creator;
 
 import com.creatubbles.api.core.CreatubblesRequest;
+import com.creatubbles.api.core.CreatubblesResponse;
+import com.creatubbles.api.response.creator.UsersCreatorsResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
@@ -38,5 +40,10 @@ public class UsersCreatorsRequest extends CreatubblesRequest {
 
     public void setPageNumber(int pageNumber) {
         setUrlParameter("page", String.valueOf(pageNumber));
+    }
+
+    @Override
+    public Class<? extends CreatubblesResponse> getResponseClass() {
+        return UsersCreatorsResponse.class;
     }
 }

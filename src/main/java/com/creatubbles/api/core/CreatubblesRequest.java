@@ -10,15 +10,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class CreatubblesRequest {
-    private String endPoint;
+public abstract class CreatubblesRequest {
+    private String endPoint, acceptLanguage, xSource, data;
     private HttpMethod httpMethod;
-    private String acceptLanguage;
-    private String xSource;
-    private String data;
     private Map<String, String> urlParameters;
+    private Response response;
+    private Future<Response> futureResponse;
 
     public CreatubblesRequest(String endPoint, HttpMethod httpMethod) {
         this(endPoint, httpMethod, null, null);
@@ -99,46 +99,51 @@ public class CreatubblesRequest {
         return this;
     }
 
-    public Response execute() {
-        String url = CreatubblesAPI.buildURL(endPoint);
+    public abstract Class<? extends CreatubblesResponse> getResponseClass();
 
-        JerseyWebTarget webTarget = CreatubblesAPI.CLIENT.target(url);
-        for (String paramKey : urlParameters.keySet()) {
-            String paramValue = urlParameters.get(paramKey);
-            if (paramValue != null && !paramValue.isEmpty()) {
-                webTarget = webTarget.queryParam(paramKey, paramValue);
-            }
-        }
-
-        Invocation.Builder invocationBuilder = webTarget
-                .request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
-
-        if (acceptLanguage != null && acceptLanguage.length() == 2) {
-            invocationBuilder.header("Accept-Language", acceptLanguage.toLowerCase());
-        }
-
-        if (xSource != null && !xSource.isEmpty()) {
-            invocationBuilder.header("X-Source", xSource.toLowerCase());
-        }
-
-        switch (httpMethod) {
-            case GET: {
-                return invocationBuilder.get();
-            }
-            case POST: {
-                return invocationBuilder.post(Entity.entity(data, MediaType.APPLICATION_JSON));
-            }
-            case PUT: {
-                return invocationBuilder.put(Entity.entity(data, MediaType.APPLICATION_JSON));
-            }
-            default: {
-                return null;
-            }
+    private void resetResponse() {
+        if (response != null || futureResponse != null) {
+            response = null;
+            futureResponse = null;
         }
     }
 
-    public Future<Response> async() {
+    public boolean isDone() {
+        return ((response != null) || (futureResponse != null && futureResponse.isDone()));
+    }
+
+    public void cancelRequest() {
+        if (futureResponse != null & !futureResponse.isDone()) {
+            futureResponse.cancel(true);
+        }
+    }
+
+    public Response getRawResponse() {
+        if (response == null && futureResponse.isDone()) {
+            try {
+                response = futureResponse.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return response;
+    }
+
+    public CreatubblesResponse getResponse() {
+        Response response = getRawResponse();
+        Class<?> responseClass = getResponseClass();
+        if (response != null && responseClass != null) {
+            return CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), getResponseClass());
+        }
+
+        return null;
+    }
+
+    public CreatubblesRequest execute() {
+        resetResponse();
         String url = CreatubblesAPI.buildURL(endPoint);
 
         JerseyWebTarget webTarget = CreatubblesAPI.CLIENT.target(url);
@@ -161,19 +166,49 @@ public class CreatubblesRequest {
             invocationBuilder.header("X-Source", xSource.toLowerCase());
         }
 
-        switch (httpMethod) {
-            case GET: {
-                return invocationBuilder.async().get();
-            }
-            case POST: {
-                return invocationBuilder.async().post(Entity.entity(data, MediaType.APPLICATION_JSON));
-            }
-            case PUT: {
-                return invocationBuilder.async().put(Entity.entity(data, MediaType.APPLICATION_JSON));
-            }
-            default: {
-                return null;
+        if (httpMethod == HttpMethod.GET) {
+            response = invocationBuilder.get();
+        } else if (httpMethod == HttpMethod.POST) {
+            response = invocationBuilder.post(Entity.entity(data, MediaType.APPLICATION_JSON));
+        } else if (httpMethod == HttpMethod.PUT) {
+            response = invocationBuilder.put(Entity.entity(data, MediaType.APPLICATION_JSON));
+        }
+
+        return this;
+    }
+
+    public CreatubblesRequest async() {
+        resetResponse();
+        String url = CreatubblesAPI.buildURL(endPoint);
+
+        JerseyWebTarget webTarget = CreatubblesAPI.CLIENT.target(url);
+        for (String paramKey : urlParameters.keySet()) {
+            String paramValue = urlParameters.get(paramKey);
+            if (paramValue != null && !paramValue.isEmpty()) {
+                webTarget = webTarget.queryParam(paramKey, paramValue);
             }
         }
+
+        Invocation.Builder invocationBuilder = webTarget
+                .request(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        if (acceptLanguage != null && acceptLanguage.length() == 2) {
+            invocationBuilder.header("Accept-Language", acceptLanguage.toLowerCase());
+        }
+
+        if (xSource != null && !xSource.isEmpty()) {
+            invocationBuilder.header("X-Source", xSource.toLowerCase());
+        }
+
+        if (httpMethod == HttpMethod.GET) {
+            futureResponse = invocationBuilder.async().get();
+        } else if (httpMethod == HttpMethod.POST) {
+            futureResponse = invocationBuilder.async().post(Entity.entity(data, MediaType.APPLICATION_JSON));
+        } else if (httpMethod == HttpMethod.PUT) {
+            futureResponse = invocationBuilder.async().put(Entity.entity(data, MediaType.APPLICATION_JSON));
+        }
+
+        return this;
     }
 }

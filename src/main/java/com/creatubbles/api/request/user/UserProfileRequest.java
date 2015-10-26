@@ -1,6 +1,8 @@
 package com.creatubbles.api.request.user;
 
 import com.creatubbles.api.core.CreatubblesRequest;
+import com.creatubbles.api.core.CreatubblesResponse;
+import com.creatubbles.api.response.user.UserProfileResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
@@ -16,5 +18,10 @@ public class UserProfileRequest extends CreatubblesRequest {
 
     public UserProfileRequest(String id, String accessToken) {
         super(String.format(EndPoints.USERS_PROFILE, id), HttpMethod.GET, accessToken);
+    }
+
+    @Override
+    public Class<? extends CreatubblesResponse> getResponseClass() {
+        return UserProfileResponse.class;
     }
 }
