@@ -1,12 +1,11 @@
 package com.creatubbles.api.request.gallery;
 
 import com.creatubbles.api.core.CreatubblesRequest;
-import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.response.gallery.UserGalleryResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-public class UserGalleryRequest extends CreatubblesRequest {
+public class UserGalleryRequest extends CreatubblesRequest<UserGalleryResponse> {
 
     public UserGalleryRequest(String id) {
         this(id, null);
@@ -17,7 +16,7 @@ public class UserGalleryRequest extends CreatubblesRequest {
     }
 
     @Override
-    public Class<? extends CreatubblesResponse> getResponseClass() {
+    public Class<? extends UserGalleryResponse> getResponseClass() {
         return UserGalleryResponse.class;
     }
 }

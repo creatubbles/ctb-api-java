@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public abstract class CreatubblesRequest {
+public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private String endPoint, acceptLanguage, xSource, data;
     private HttpMethod httpMethod;
     private Map<String, String> urlParameters;
@@ -49,7 +49,7 @@ public abstract class CreatubblesRequest {
         return endPoint;
     }
 
-    public CreatubblesRequest setEndPoint(String endPoint) {
+    public CreatubblesRequest<T> setEndPoint(String endPoint) {
         this.endPoint = endPoint;
         return this;
     }
@@ -58,7 +58,7 @@ public abstract class CreatubblesRequest {
         return httpMethod;
     }
 
-    public CreatubblesRequest setHttpMethod(HttpMethod httpMethod) {
+    public CreatubblesRequest<T> setHttpMethod(HttpMethod httpMethod) {
         this.httpMethod = httpMethod;
         return this;
     }
@@ -71,7 +71,7 @@ public abstract class CreatubblesRequest {
         return acceptLanguage;
     }
 
-    public CreatubblesRequest setAcceptLanguage(String acceptLanguage) {
+    public CreatubblesRequest<T> setAcceptLanguage(String acceptLanguage) {
         this.acceptLanguage = acceptLanguage;
         return this;
     }
@@ -80,7 +80,7 @@ public abstract class CreatubblesRequest {
         return xSource;
     }
 
-    public CreatubblesRequest setXSource(String xSource) {
+    public CreatubblesRequest<T> setXSource(String xSource) {
         this.xSource = xSource;
         return this;
     }
@@ -89,17 +89,17 @@ public abstract class CreatubblesRequest {
         return data;
     }
 
-    public CreatubblesRequest setData(String data) {
+    public CreatubblesRequest<T> setData(String data) {
         this.data = data;
         return this;
     }
 
-    public CreatubblesRequest setUrlParameter(String key, String value) {
+    public CreatubblesRequest<T> setUrlParameter(String key, String value) {
         this.urlParameters.put(key, value);
         return this;
     }
 
-    public abstract Class<? extends CreatubblesResponse> getResponseClass();
+    public abstract Class<? extends T> getResponseClass();
 
     private void resetResponse() {
         if (response != null || futureResponse != null) {
@@ -132,17 +132,17 @@ public abstract class CreatubblesRequest {
         return response;
     }
 
-    public CreatubblesResponse getResponse() {
+    public T getResponse() {
         Response response = getRawResponse();
-        Class<?> responseClass = getResponseClass();
+        Class<? extends T> responseClass = getResponseClass();
         if (response != null && responseClass != null) {
-            return CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), getResponseClass());
+            return CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), responseClass);
         }
 
         return null;
     }
 
-    public CreatubblesRequest execute() {
+    public CreatubblesRequest<T> execute() {
         resetResponse();
         String url = CreatubblesAPI.buildURL(endPoint);
 
@@ -177,7 +177,7 @@ public abstract class CreatubblesRequest {
         return this;
     }
 
-    public CreatubblesRequest async() {
+    public CreatubblesRequest<T> async() {
         resetResponse();
         String url = CreatubblesAPI.buildURL(endPoint);
 

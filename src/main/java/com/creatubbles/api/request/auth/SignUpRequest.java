@@ -2,14 +2,13 @@ package com.creatubbles.api.request.auth;
 
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.CreatubblesRequest;
-import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.core.User;
 import com.creatubbles.api.response.auth.SignUpResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 import com.google.gson.JsonObject;
 
-public class SignUpRequest extends CreatubblesRequest {
+public class SignUpRequest extends CreatubblesRequest<SignUpResponse> {
 
     public SignUpRequest(String email, String password, String country) {
         super(EndPoints.SIGN_UP, HttpMethod.POST);
@@ -34,7 +33,7 @@ public class SignUpRequest extends CreatubblesRequest {
     }
 
     @Override
-    public Class<? extends CreatubblesResponse> getResponseClass() {
+    public Class<? extends SignUpResponse> getResponseClass() {
         return SignUpResponse.class;
     }
 }

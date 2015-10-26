@@ -1,12 +1,11 @@
 package com.creatubbles.api.request.creation;
 
 import com.creatubbles.api.core.CreatubblesRequest;
-import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.response.CreationResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-public class CreationRequest extends CreatubblesRequest {
+public class CreationRequest extends CreatubblesRequest<CreationResponse> {
 
     public CreationRequest() {
         this("me", null);
@@ -21,7 +20,7 @@ public class CreationRequest extends CreatubblesRequest {
     }
 
     @Override
-    public Class<? extends CreatubblesResponse> getResponseClass() {
+    public Class<? extends CreationResponse> getResponseClass() {
         return CreationResponse.class;
     }
 }
