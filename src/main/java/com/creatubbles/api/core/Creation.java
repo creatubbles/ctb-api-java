@@ -6,4 +6,5 @@ public class Creation {
     public int created_at_month, created_at_year, comments_count, bubble_count, views_count;
     public String last_bubbled_at, last_commented_at, last_submitted_at;
     public Image image;
+    public Creator[] creators;
 }

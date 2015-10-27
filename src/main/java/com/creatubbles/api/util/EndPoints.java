@@ -25,7 +25,7 @@ public class EndPoints {
 
     public static final String CREATIONS = "creations.json";
 
-    public static final String CREATORS_CREATIONS = "creators/%s/creations.json";
+    public static final String CREATORS_CREATIONS = "creators/%d/creations.json?page=%d";
 
     public static final String SEARCH_CREATIONS = "search/creations.json";
 

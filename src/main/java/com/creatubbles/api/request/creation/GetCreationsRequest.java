@@ -11,12 +11,20 @@ public class GetCreationsRequest extends CreatubblesRequest<GetCreationsResponse
         super(EndPoints.CREATIONS, HttpMethod.GET);
     }
 
-    public GetCreationsRequest(String id) {
-        super(String.format(EndPoints.CREATORS_CREATIONS, id), HttpMethod.GET);
+    public GetCreationsRequest(int id) {
+        this(id, 1);
     }
 
-    public GetCreationsRequest(String id, String accessToken) {
-        super(String.format(EndPoints.CREATORS_CREATIONS, id), HttpMethod.GET, accessToken);
+    public GetCreationsRequest(int id, int page) {
+        super(String.format(EndPoints.CREATORS_CREATIONS, id, page), HttpMethod.GET);
+    }
+
+    public GetCreationsRequest(int id, String accessToken) {
+        this(id, 1, accessToken);
+    }
+
+    public GetCreationsRequest(int id, int page, String accessToken) {
+        super(String.format(EndPoints.CREATORS_CREATIONS, id, page), HttpMethod.GET, accessToken);
     }
 
     public String getCreatorIdParam() {
