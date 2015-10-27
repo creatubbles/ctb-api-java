@@ -45,7 +45,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         }
     }
 
-    public CreatubblesRequest setAccessToken(String accessToken) {
+    public CreatubblesRequest<T> setAccessToken(String accessToken) {
         this.urlParameters.put("access_token", accessToken);
         return this;
     }
@@ -68,8 +68,8 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         return this;
     }
 
-    public Map<String, String> getUrlParameters() {
-        return urlParameters;
+    public String getUrlParameter(String key) {
+        return urlParameters.get(key);
     }
 
     public String getAcceptLanguage() {

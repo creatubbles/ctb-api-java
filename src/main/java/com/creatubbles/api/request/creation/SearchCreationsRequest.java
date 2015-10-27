@@ -1,12 +1,11 @@
 package com.creatubbles.api.request.creation;
 
 import com.creatubbles.api.core.CreatubblesRequest;
-import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.response.creation.SearchCreationsResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-public class SearchCreationsRequest extends CreatubblesRequest {
+public class SearchCreationsRequest extends CreatubblesRequest<SearchCreationsResponse> {
 
     public SearchCreationsRequest(String searchParam) {
         super(EndPoints.SEARCH_CREATIONS, HttpMethod.GET);
@@ -14,7 +13,7 @@ public class SearchCreationsRequest extends CreatubblesRequest {
     }
 
     public String getSearchParam() {
-        return getUrlParameters().get("search");
+        return getUrlParameter("search");
     }
 
     public SearchCreationsRequest setSearchParam(String searchParam) {
@@ -24,7 +23,7 @@ public class SearchCreationsRequest extends CreatubblesRequest {
 
     public Integer getPageNumber() {
         try {
-            return Integer.parseInt(getUrlParameters().get("page"));
+            return Integer.parseInt(getUrlParameter("page"));
         } catch (NumberFormatException e) {
 
         }
@@ -37,7 +36,7 @@ public class SearchCreationsRequest extends CreatubblesRequest {
     }
 
     @Override
-    public Class<? extends CreatubblesResponse> getResponseClass() {
+    public Class<? extends SearchCreationsResponse> getResponseClass() {
         return SearchCreationsResponse.class;
     }
 }

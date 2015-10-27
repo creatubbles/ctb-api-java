@@ -19,7 +19,7 @@ public class CreatorsFollowingUsersRequest extends CreatubblesRequest<CreatorsFo
 
     public Integer getPageNumber() {
         try {
-            return Integer.parseInt(getUrlParameters().get("page"));
+            return Integer.parseInt(getUrlParameter("page"));
         } catch (NumberFormatException e) {
 
         }

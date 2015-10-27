@@ -1,12 +1,11 @@
 package com.creatubbles.api.request.creation;
 
 import com.creatubbles.api.core.CreatubblesRequest;
-import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.response.creation.GetCreationsResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-public class GetCreationsRequest extends CreatubblesRequest {
+public class GetCreationsRequest extends CreatubblesRequest<GetCreationsResponse> {
 
     public GetCreationsRequest() {
         super(EndPoints.CREATIONS, HttpMethod.GET);
@@ -21,7 +20,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
     }
 
     public String getCreatorIdParam() {
-        return getUrlParameters().get("creator_id");
+        return getUrlParameter("creator_id");
     }
 
     public GetCreationsRequest setCreatorIdParam(boolean creatorId) {
@@ -30,7 +29,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
     }
 
     public String getByCreatorIdParam() {
-        return getUrlParameters().get("by_creator");
+        return getUrlParameter("by_creator");
     }
 
     public GetCreationsRequest setByCreatorIdParam(boolean creatorId) {
@@ -39,7 +38,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
     }
 
     public boolean getFeaturedParam() {
-        return Boolean.parseBoolean(getUrlParameters().get("featured"));
+        return Boolean.parseBoolean(getUrlParameter("featured"));
     }
 
     public GetCreationsRequest setFeaturedParam(boolean featured) {
@@ -48,7 +47,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
     }
 
     public boolean getRecentParam() {
-        return Boolean.parseBoolean(getUrlParameters().get("recent"));
+        return Boolean.parseBoolean(getUrlParameter("recent"));
     }
 
     public GetCreationsRequest setRecentParam(boolean recent) {
@@ -57,7 +56,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
     }
 
     public boolean getPopularParam() {
-        return Boolean.parseBoolean(getUrlParameters().get("popular"));
+        return Boolean.parseBoolean(getUrlParameter("popular"));
     }
 
     public GetCreationsRequest setPopularParam(boolean popular) {
@@ -66,7 +65,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
     }
 
     public boolean getBubbledParam() {
-        return Boolean.parseBoolean(getUrlParameters().get("bubbled"));
+        return Boolean.parseBoolean(getUrlParameter("bubbled"));
     }
 
     public GetCreationsRequest setBubbledParam(boolean bubbled) {
@@ -76,7 +75,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
 
     public Integer getPageNumber() {
         try {
-            return Integer.parseInt(getUrlParameters().get("page"));
+            return Integer.parseInt(getUrlParameter("page"));
         } catch (NumberFormatException e) {
 
         }
@@ -89,7 +88,7 @@ public class GetCreationsRequest extends CreatubblesRequest {
     }
 
     @Override
-    public Class<? extends CreatubblesResponse> getResponseClass() {
+    public Class<? extends GetCreationsResponse> getResponseClass() {
         return GetCreationsResponse.class;
     }
 }

@@ -12,7 +12,7 @@ public class GetAmazonTokenRequest extends CreatubblesRequest<GetAmazonTokenResp
     }
 
     @Override
-    public Class getResponseClass() {
+    public Class<? extends GetAmazonTokenResponse> getResponseClass() {
         return GetAmazonTokenResponse.class;
     }
 }

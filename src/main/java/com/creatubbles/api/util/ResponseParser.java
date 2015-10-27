@@ -21,8 +21,7 @@ public class ResponseParser {
             .registerTypeAdapter(Gallery.class, new Gallery())
             .create();
 
-    public static CreatubblesResponse parse(Response response, Class requestClass) {
-
+    public static CreatubblesResponse parse(Response response, Class<?> requestClass) {
         return null;
     }
 }
