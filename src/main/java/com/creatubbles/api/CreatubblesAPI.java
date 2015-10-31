@@ -55,8 +55,7 @@ public class CreatubblesAPI {
         Creation creation = uploadResponse.creation;
         String relativePath = creation.store_dir + "/" + fileName;
         new UploadS3ImageRequest(data, relativePath).execute().getResponse();
-        Image img = new Image();
-        img.url = relativePath;
+        creation.url = relativePath;
         UpdateCreationResponse updateResponse = new UpdateCreationRequest(response.access_token, creation).execute().getResponse();
         System.exit(0);
     }

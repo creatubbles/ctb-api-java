@@ -1,6 +1,7 @@
 package com.creatubbles.api.request.amazon;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
@@ -35,7 +36,8 @@ public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageRespon
         AmazonS3 client = S3ClientUtil.getClient();
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(data.length);
-        PutObjectRequest putObjectRequest = new PutObjectRequest(S3ClientUtil.AWS_S3_BUCKET_NAME, filePath, new ByteArrayInputStream(data), metadata);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(S3ClientUtil.AWS_S3_BUCKET_NAME, filePath, new ByteArrayInputStream(data), metadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead);
         client.putObject(putObjectRequest);
         return this;
     }

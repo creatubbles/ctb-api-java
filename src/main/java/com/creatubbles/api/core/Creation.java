@@ -8,4 +8,5 @@ public class Creation {
     public Image image;
     public Creator[] creators;
     public String store_dir;
+    public String url;
 }
