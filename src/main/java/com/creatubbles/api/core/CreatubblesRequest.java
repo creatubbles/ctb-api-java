@@ -3,6 +3,7 @@ package com.creatubbles.api.core;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.util.HttpMethod;
 import org.glassfish.jersey.client.JerseyWebTarget;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -19,6 +20,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private Map<String, String> urlParameters;
     private Response response;
     private Future<Response> futureResponse;
+    private static final String EMPTY_RESPONSE = "{}";
 
     public CreatubblesRequest(String endPoint, HttpMethod httpMethod) {
         this(endPoint, httpMethod, null, null);
@@ -106,7 +108,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
 
     public abstract Class<? extends T> getResponseClass();
 
-    private void resetResponse() {
+    public void resetResponse() {
         if (response != null || futureResponse != null) {
             response = null;
             futureResponse = null;
@@ -119,9 +121,13 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
 
     public boolean wasSuccessful() {
         if (isDone()) {
-            return getRawResponse().getStatus() == 200;
+            return isSuccessStatus(getRawResponse());
         }
         return false;
+    }
+
+    private boolean isSuccessStatus(Response response) {
+        return response.getStatus() == 200 || response.getStatus() ==  204;
     }
 
     public void cancelRequest() {
@@ -148,7 +154,11 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         Response response = getRawResponse();
         Class<? extends T> responseClass = getResponseClass();
         if (response != null && responseClass != null) {
-            T creatubblesResponse = CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), responseClass);
+            String json = response.readEntity(String.class);
+            if (isSuccessStatus(response) && json.isEmpty()) {
+                json = EMPTY_RESPONSE;
+            }
+            T creatubblesResponse = CreatubblesAPI.GSON.fromJson(json, responseClass);
             creatubblesResponse.setOriginatingRequest(this);
             return creatubblesResponse;
         }
@@ -167,6 +177,8 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
                 webTarget = webTarget.queryParam(paramKey, paramValue);
             }
         }
+        HttpAuthenticationFeature basicAuth = HttpAuthenticationFeature.basic("c", "c");
+        webTarget.register(basicAuth);
 
         Invocation.Builder invocationBuilder = webTarget
                 .request(MediaType.APPLICATION_JSON)

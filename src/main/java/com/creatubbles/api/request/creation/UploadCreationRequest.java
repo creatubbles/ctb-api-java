@@ -8,8 +8,8 @@ import com.creatubbles.api.util.HttpMethod;
 // TODO Order of operations (and how the upload actually happens) is kind of vague in the API docs - figure out OoO
 public class UploadCreationRequest extends CreatubblesRequest<UploadCreationResponse> {
 
-    public UploadCreationRequest() {
-        super(EndPoints.CREATIONS, HttpMethod.POST);
+    public UploadCreationRequest(String accessToken) {
+        super(EndPoints.CREATIONS, HttpMethod.POST, accessToken);
     }
 
     @Override
