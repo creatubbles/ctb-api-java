@@ -23,7 +23,6 @@ public class CreatubblesAPI {
 
     public final static JerseyClient CLIENT = JerseyClientBuilder
             .createClient()
-            .register(SignUpResponse.class)
             .property(ClientProperties.CONNECT_TIMEOUT, 5000)
             .property(ClientProperties.READ_TIMEOUT, 5000);
 
