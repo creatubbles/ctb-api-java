@@ -1,15 +1,16 @@
 package com.creatubbles.api;
 
 import com.creatubbles.api.core.Creation;
+import com.creatubbles.api.core.Credentials;
 import com.creatubbles.api.core.Gallery;
-import com.creatubbles.api.core.Image;
+import com.creatubbles.api.request.amazon.GetAmazonTokenRequest;
 import com.creatubbles.api.request.amazon.UploadS3ImageRequest;
 import com.creatubbles.api.request.auth.SignInRequest;
 import com.creatubbles.api.request.creation.UpdateCreationRequest;
 import com.creatubbles.api.request.creation.UploadCreationRequest;
+import com.creatubbles.api.response.amazon.GetAmazonTokenResponse;
 import com.creatubbles.api.response.auth.SignInResponse;
 import com.creatubbles.api.response.auth.SignUpResponse;
-import com.creatubbles.api.response.creation.UpdateCreationResponse;
 import com.creatubbles.api.response.creation.UploadCreationResponse;
 import com.creatubbles.api.response.creator.CreateCreatorResponse;
 import com.creatubbles.api.response.gallery.CreateUserGalleryResponse;
@@ -45,18 +46,26 @@ public class CreatubblesAPI {
     }
 
     public static void main(String[] args) throws IOException {
+        //login
         SignInResponse response = new SignInRequest("jevgeni.koltsin@gmail.com", "ccttbb").execute().getResponse();
         System.out.println(response.access_token);
+        //create creation
         UploadCreationResponse uploadResponse = new UploadCreationRequest(response.access_token).execute().getResponse();
+        //get required info for s3
+        GetAmazonTokenResponse amazonTokenResponse = new GetAmazonTokenRequest(response.access_token).execute().getResponse();
+        Credentials credentials = amazonTokenResponse.credentials;
         //TODO: last screenshot
         File file = new File("C:/dev/1.png");
         byte[] data = Files.readAllBytes(file.toPath());
         String fileName = System.currentTimeMillis() + "creation.png";
         Creation creation = uploadResponse.creation;
         String relativePath = creation.store_dir + "/" + fileName;
-        new UploadS3ImageRequest(data, relativePath).execute().getResponse();
+        //upload image
+        new UploadS3ImageRequest(data, relativePath, credentials.access_key_id, credentials.secret_access_key, credentials.session_token)
+                .execute().getResponse();
         creation.url = relativePath;
-        UpdateCreationResponse updateResponse = new UpdateCreationRequest(response.access_token, creation).execute().getResponse();
+        //update creation(url)
+        new UpdateCreationRequest(response.access_token, creation).execute().getResponse();
         System.exit(0);
     }
 }
