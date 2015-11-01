@@ -19,6 +19,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private Map<String, String> urlParameters;
     private Response response;
     private Future<Response> futureResponse;
+    private T responseCache;
 
     public CreatubblesRequest(String endPoint, HttpMethod httpMethod) {
         this(endPoint, httpMethod, null, null);
@@ -145,15 +146,16 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     }
 
     public T getResponse() {
-        Response response = getRawResponse();
-        Class<? extends T> responseClass = getResponseClass();
-        if (response != null && responseClass != null) {
-            T creatubblesResponse = CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), responseClass);
-            creatubblesResponse.setOriginatingRequest(this);
-            return creatubblesResponse;
+        if (responseCache == null) {
+            Response response = getRawResponse();
+            Class<? extends T> responseClass = getResponseClass();
+            if (response != null && responseClass != null) {
+                T creatubblesResponse = CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), responseClass);
+                creatubblesResponse.setOriginatingRequest(this);
+                responseCache = creatubblesResponse;
+            }
         }
-
-        return null;
+        return responseCache;
     }
 
     public CreatubblesRequest<T> execute() {
