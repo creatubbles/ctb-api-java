@@ -1,30 +1,17 @@
 package com.creatubbles.api;
 
-import com.creatubbles.api.core.Creation;
-import com.creatubbles.api.core.Credentials;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.JerseyClient;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+
 import com.creatubbles.api.core.Gallery;
-import com.creatubbles.api.request.amazon.GetAmazonTokenRequest;
-import com.creatubbles.api.request.amazon.UploadS3ImageRequest;
-import com.creatubbles.api.request.auth.SignInRequest;
-import com.creatubbles.api.request.creation.UpdateCreationRequest;
-import com.creatubbles.api.request.creation.UploadCreationRequest;
-import com.creatubbles.api.response.amazon.GetAmazonTokenResponse;
-import com.creatubbles.api.response.auth.SignInResponse;
 import com.creatubbles.api.response.auth.SignUpResponse;
-import com.creatubbles.api.response.creation.UploadCreationResponse;
 import com.creatubbles.api.response.creator.CreateCreatorResponse;
 import com.creatubbles.api.response.gallery.CreateUserGalleryResponse;
 import com.creatubbles.api.response.user.UserProfileResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.JerseyClient;
-import org.glassfish.jersey.client.JerseyClientBuilder;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 public class CreatubblesAPI {
     public final static Gson GSON = new GsonBuilder()
@@ -42,7 +29,14 @@ public class CreatubblesAPI {
             .property(ClientProperties.READ_TIMEOUT, 5000);
 
     public static String buildURL(final String endPoint) {
-        return EndPoints.URL_BASE + endPoint;
+        String base = staging ? EndPoints.URL_BASE_STAGING : EndPoints.URL_BASE;
+        return base.concat(endPoint);
+    }
+
+    private static boolean staging = false;
+
+    public static void setStagingMode(boolean staging) {
+        CreatubblesAPI.staging = staging;
     }
 
 }
