@@ -14,7 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
-    private String endPoint, acceptLanguage, xSource, data;
+    private String endPoint, acceptLanguage, data;
+    private String xSource = "mc-mod";
     private HttpMethod httpMethod;
     private Map<String, String> urlParameters;
     private Response response;
