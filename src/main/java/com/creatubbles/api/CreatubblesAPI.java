@@ -42,7 +42,14 @@ public class CreatubblesAPI {
             .property(ClientProperties.READ_TIMEOUT, 5000);
 
     public static String buildURL(final String endPoint) {
-        return EndPoints.URL_BASE + endPoint;
+        String base = staging ? EndPoints.URL_BASE_STAGING : EndPoints.URL_BASE;
+        return base.concat(endPoint);
+    }
+
+    private static boolean staging = false;
+
+    public static void setStagingMode(boolean staging) {
+        CreatubblesAPI.staging = staging;
     }
 
     public static void main(String[] args) throws IOException {

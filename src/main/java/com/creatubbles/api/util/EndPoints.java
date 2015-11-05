@@ -2,7 +2,9 @@ package com.creatubbles.api.util;
 
 public class EndPoints {
 
-    public final static String URL_BASE = "https://staging.creatubbles.com/api/v1/";
+    public final static String URL_BASE = "https://www.creatubbles.com/api/v1/";
+
+    public static final String URL_BASE_STAGING = "https://staging.creatubbles.com/api/v1/";
 
     public static final String SIGN_IN = "users/sign_in.json";
 
