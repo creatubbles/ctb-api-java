@@ -161,7 +161,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
                 if (isSuccessStatus(response) && json.isEmpty()) {
                     json = EMPTY_RESPONSE;
                 }
-                T creatubblesResponse = CreatubblesAPI.GSON.fromJson(response.readEntity(String.class), responseClass);
+                T creatubblesResponse = CreatubblesAPI.GSON.fromJson(json, responseClass);
                 creatubblesResponse.setOriginatingRequest(this);
                 responseCache = creatubblesResponse;
             }
