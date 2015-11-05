@@ -52,27 +52,4 @@ public class CreatubblesAPI {
         CreatubblesAPI.staging = staging;
     }
 
-    public static void main(String[] args) throws IOException {
-        //login
-        SignInResponse response = new SignInRequest("jevgeni.koltsin@gmail.com", "ccttbb").execute().getResponse();
-        System.out.println(response.access_token);
-        //create creation
-        UploadCreationResponse uploadResponse = new UploadCreationRequest(response.access_token).execute().getResponse();
-        //get required info for s3
-        GetAmazonTokenResponse amazonTokenResponse = new GetAmazonTokenRequest(response.access_token).execute().getResponse();
-        Credentials credentials = amazonTokenResponse.credentials;
-        //TODO: last screenshot
-        File file = new File("C:/dev/1.png");
-        byte[] data = Files.readAllBytes(file.toPath());
-        String fileName = System.currentTimeMillis() + "creation.png";
-        Creation creation = uploadResponse.creation;
-        String relativePath = creation.store_dir + "/" + fileName;
-        //upload image
-        new UploadS3ImageRequest(data, relativePath, credentials.access_key_id, credentials.secret_access_key, credentials.session_token)
-                .execute().getResponse();
-        creation.url = relativePath;
-        //update creation(url)
-        new UpdateCreationRequest(response.access_token, creation).execute().getResponse();
-        System.exit(0);
-    }
 }
