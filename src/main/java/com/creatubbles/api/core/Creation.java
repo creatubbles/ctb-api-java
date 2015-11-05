@@ -7,4 +7,6 @@ public class Creation {
     public String last_bubbled_at, last_commented_at, last_submitted_at;
     public Image image;
     public Creator[] creators;
+    public String store_dir;
+    public String url;
 }

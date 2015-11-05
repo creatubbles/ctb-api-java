@@ -2,7 +2,7 @@ package com.creatubbles.api.util;
 
 public class EndPoints {
 
-    public final static String URL_BASE = "https://www.creatubbles.com/api/v1/";
+    public final static String URL_BASE = "https://staging.creatubbles.com/api/v1/";
 
     public static final String SIGN_IN = "users/sign_in.json";
 
@@ -22,6 +22,8 @@ public class EndPoints {
     public static final String CREATORS_FOLLOWERS = "creators/%s/users/followers.json";
 
     public static final String USERS_GALLERIES = "users/%s/galleries.json";
+
+    public static final String CREATIONS_BY_ID = "creations/%s.json";
 
     public static final String CREATIONS = "creations.json";
 
