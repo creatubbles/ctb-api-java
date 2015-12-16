@@ -1,5 +1,7 @@
 package com.creatubbles.api;
 
+import com.creatubbles.api.request.auth.OAuthAccessTokenRequest;
+import com.creatubbles.api.response.auth.OAuthAccessTokenResponse;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -37,6 +39,13 @@ public class CreatubblesAPI {
 
     public static void setStagingMode(boolean staging) {
         CreatubblesAPI.staging = staging;
+    }
+
+    public static void main(String[] args) {
+        CreatubblesAPI.setStagingMode(true);
+        OAuthAccessTokenRequest request = new OAuthAccessTokenRequest("jevgeni.koltsin@gmail.com", "ccttbb");
+        OAuthAccessTokenResponse response = request.execute().getResponse();
+        System.out.println(response);
     }
 
 }

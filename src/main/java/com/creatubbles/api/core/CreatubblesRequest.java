@@ -240,4 +240,8 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
 
         return this;
     }
+    public void setResponse(Response response) {
+        this.response = response;
+    }
+
 }
