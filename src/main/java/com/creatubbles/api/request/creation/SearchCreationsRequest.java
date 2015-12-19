@@ -1,10 +1,12 @@
 package com.creatubbles.api.request.creation;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.creation.SearchCreationsResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
+@APIVersion(1)
 public class SearchCreationsRequest extends CreatubblesRequest<SearchCreationsResponse> {
 
     public SearchCreationsRequest(String searchParam) {

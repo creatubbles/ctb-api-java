@@ -1,10 +1,10 @@
 package com.creatubbles.api.request.auth;
 
 import com.creatubbles.api.CreatubblesAPI;
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.auth.OAuthAccessTokenResponse;
 import org.glassfish.jersey.client.JerseyWebTarget;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -15,6 +15,7 @@ import static com.creatubbles.api.util.EndPoints.OAUTH_TOKEN;
 import static com.creatubbles.api.util.OAuthUtil.CLIENT_ID;
 import static com.creatubbles.api.util.OAuthUtil.CLIENT_SECRET;
 
+@APIVersion(2)
 public class OAuthAccessTokenRequest extends CreatubblesRequest<OAuthAccessTokenResponse> {
 
     private String username;
@@ -37,12 +38,8 @@ public class OAuthAccessTokenRequest extends CreatubblesRequest<OAuthAccessToken
         String url = CreatubblesAPI.buildURL(OAUTH_TOKEN);
 
         JerseyWebTarget webTarget = CreatubblesAPI.CLIENT.target(url);
-        HttpAuthenticationFeature basicAuth = HttpAuthenticationFeature.basic("c", "c");
-        webTarget.register(basicAuth);
-
         Invocation.Builder invocationBuilder = webTarget
                 .request(MediaType.APPLICATION_FORM_URLENCODED)
-                .acceptEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON);
 
         if (getXSource() != null && !getXSource().isEmpty()) {

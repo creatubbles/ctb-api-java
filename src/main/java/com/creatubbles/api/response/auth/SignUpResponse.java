@@ -1,5 +1,6 @@
 package com.creatubbles.api.response.auth;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.core.User;
@@ -8,6 +9,7 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
+@APIVersion(1)
 public class SignUpResponse extends CreatubblesResponse implements JsonDeserializer<SignUpResponse> {
     public User user;
     public SignUpError errors;

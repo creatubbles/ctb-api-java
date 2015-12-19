@@ -1,98 +1,30 @@
 package com.creatubbles.api.request.creation;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.creation.GetCreationsResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
+@APIVersion(2)
 public class GetCreationsRequest extends CreatubblesRequest<GetCreationsResponse> {
 
-    public GetCreationsRequest() {
-        super(EndPoints.CREATIONS, HttpMethod.GET);
+    public GetCreationsRequest(String userId, String authToken) {
+        this(userId, 1, authToken);
     }
 
-    public GetCreationsRequest(int id) {
-        this(id, 1);
+    public GetCreationsRequest(String userId, int page, String accessToken) {
+        super(EndPoints.CREATIONS, HttpMethod.GET, accessToken);
+        setUrlParameter(Params.user_id.name(), userId);
+        setUrlParameter(Params.page.name(), String.valueOf(page));
     }
 
-    public GetCreationsRequest(int id, int page) {
-        super(String.format(EndPoints.CREATORS_CREATIONS, id, page), HttpMethod.GET);
-    }
+    public enum Params {
+        page, per_page, gallery_id, user_id, sort, search;
 
-    public GetCreationsRequest(int id, String accessToken) {
-        this(id, 1, accessToken);
-    }
-
-    public GetCreationsRequest(int id, int page, String accessToken) {
-        super(String.format(EndPoints.CREATORS_CREATIONS, id, page), HttpMethod.GET, accessToken);
-    }
-
-    public String getCreatorIdParam() {
-        return getUrlParameter("creator_id");
-    }
-
-    public GetCreationsRequest setCreatorIdParam(boolean creatorId) {
-        setUrlParameter("creator_id", String.valueOf(creatorId));
-        return this;
-    }
-
-    public String getByCreatorIdParam() {
-        return getUrlParameter("by_creator");
-    }
-
-    public GetCreationsRequest setByCreatorIdParam(boolean creatorId) {
-        setUrlParameter("by_creator", String.valueOf(creatorId));
-        return this;
-    }
-
-    public boolean getFeaturedParam() {
-        return Boolean.parseBoolean(getUrlParameter("featured"));
-    }
-
-    public GetCreationsRequest setFeaturedParam(boolean featured) {
-        setUrlParameter("featured", String.valueOf(featured));
-        return this;
-    }
-
-    public boolean getRecentParam() {
-        return Boolean.parseBoolean(getUrlParameter("recent"));
-    }
-
-    public GetCreationsRequest setRecentParam(boolean recent) {
-        setUrlParameter("recent", String.valueOf(recent));
-        return this;
-    }
-
-    public boolean getPopularParam() {
-        return Boolean.parseBoolean(getUrlParameter("popular"));
-    }
-
-    public GetCreationsRequest setPopularParam(boolean popular) {
-        setUrlParameter("popular", String.valueOf(popular));
-        return this;
-    }
-
-    public boolean getBubbledParam() {
-        return Boolean.parseBoolean(getUrlParameter("bubbled"));
-    }
-
-    public GetCreationsRequest setBubbledParam(boolean bubbled) {
-        setUrlParameter("bubbled", String.valueOf(bubbled));
-        return this;
-    }
-
-    public Integer getPageNumber() {
-        try {
-            return Integer.parseInt(getUrlParameter("page"));
-        } catch (NumberFormatException e) {
-
+        public enum Sort {
+            popular, recent;
         }
-        return null;
-    }
-
-    public GetCreationsRequest setPageNumber(int pageNumber) {
-        setUrlParameter("page", String.valueOf(pageNumber));
-        return this;
     }
 
     @Override

@@ -1,33 +1,27 @@
 package com.creatubbles.api.request.amazon;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.amazon.UploadS3ImageResponse;
-import com.creatubbles.api.util.S3ClientUtil;
+import com.creatubbles.api.util.MultiPartUtil;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 /**
  * Created by Jevgeni on 28.10.2015.
  */
+@APIVersion(2)
 public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageResponse> {
 
-    private String filePath;
     private byte[] data;
-    private String accessKey;
-    private String secretKey;
-    private String sessionToken;
+    private String url;
+    private String fileName;
 
-    public UploadS3ImageRequest(byte[] data, String filePath, String accessKey, String secretKey, String sessionToken) {
+    public UploadS3ImageRequest(byte[] data, String fileName, String url) {
         super(null, null);
-        this.filePath = filePath;
         this.data = data;
-        this.accessKey = accessKey;
-        this.secretKey = secretKey;
-        this.sessionToken = sessionToken;
+        this.url = url;
+        this.fileName = fileName;
     }
 
     @Override
@@ -38,12 +32,12 @@ public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageRespon
     @Override
     public CreatubblesRequest<UploadS3ImageResponse> execute() {
         resetResponse();
-        AmazonS3 client = S3ClientUtil.getClient(accessKey, secretKey, sessionToken);
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(data.length);
-        PutObjectRequest putObjectRequest = new PutObjectRequest(S3ClientUtil.AWS_S3_BUCKET_NAME, filePath, new ByteArrayInputStream(data), metadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead);
-        client.putObject(putObjectRequest);
+        try {
+            MultiPartUtil multiPart = new MultiPartUtil(url, "UTF-8");
+            multiPart.addFilePart(fileName, data, fileName).finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 

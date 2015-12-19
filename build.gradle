@@ -39,7 +39,6 @@ repositories {
 
 dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version: '2.2.4'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.10.27'
     compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.22.1'
 }
 

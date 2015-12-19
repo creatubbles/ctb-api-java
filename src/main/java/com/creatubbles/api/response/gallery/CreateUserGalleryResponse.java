@@ -1,5 +1,6 @@
 package com.creatubbles.api.response.gallery;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.core.Gallery;
@@ -8,6 +9,7 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
+@APIVersion(1)
 public class CreateUserGalleryResponse extends CreatubblesResponse implements JsonDeserializer<CreateUserGalleryResponse> {
     public Gallery gallery;
     public CreateUserGalleryError errors;

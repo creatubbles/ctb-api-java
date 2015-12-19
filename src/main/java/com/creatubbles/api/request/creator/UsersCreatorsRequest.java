@@ -1,10 +1,12 @@
 package com.creatubbles.api.request.creator;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.creator.UsersCreatorsResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
+@APIVersion(1)
 public class UsersCreatorsRequest extends CreatubblesRequest<UsersCreatorsResponse> {
 
     public UsersCreatorsRequest() {

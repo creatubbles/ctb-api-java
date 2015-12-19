@@ -1,6 +1,7 @@
 package com.creatubbles.api.request.auth;
 
 import com.creatubbles.api.CreatubblesAPI;
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.core.User;
 import com.creatubbles.api.response.auth.SignUpResponse;
@@ -8,6 +9,7 @@ import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 import com.google.gson.JsonObject;
 
+@APIVersion(1)
 public class SignUpRequest extends CreatubblesRequest<SignUpResponse> {
 
     public SignUpRequest(String email, String password, String country) {

@@ -6,13 +6,9 @@ public class EndPoints {
 
     public static final String URL_BASE_STAGING = "https://staging.creatubbles.com/api/v2/";
 
-    public static final String OAUTH_TOKEN = "oauth/token";
-
     public static final String SIGN_IN = "users/sign_in.json";
 
     public static final String SIGN_UP = "users.json";
-
-    public static final String USERS_PROFILE = "users/%s.json";
 
     @Deprecated
     public static final String AUTH_TOKEN = "sessions/auth_token.json";
@@ -29,12 +25,15 @@ public class EndPoints {
 
     public static final String CREATIONS_BY_ID = "creations/%s.json";
 
-    public static final String CREATIONS = "creations.json";
-
-    public static final String CREATORS_CREATIONS = "creators/%d/creations.json?page=%d";
-
     public static final String SEARCH_CREATIONS = "search/creations.json";
 
     public static final String AWS_TOKEN = "sessions/aws_token.json";
+
+    //API v2
+    public static final String OAUTH_TOKEN = "oauth/token";
+    public static final String USERS = "users";
+    public static final String USERS_PROFILE = "users/%s";
+    public static final String CREATIONS = "creations";
+    public static final String CREATIONS_UPLOAD = "creations/%s/uploads";
 
 }

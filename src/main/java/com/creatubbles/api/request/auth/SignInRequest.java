@@ -1,10 +1,12 @@
 package com.creatubbles.api.request.auth;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.auth.SignInResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
+@APIVersion(1)
 public class SignInRequest extends CreatubblesRequest<SignInResponse> {
 
     public SignInRequest(String email, String password) {

@@ -1,11 +1,12 @@
 package com.creatubbles.api.request.creator;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.creator.CreatorsFollowingUsersResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-
+@APIVersion(1)
 public class CreatorsFollowingUsersRequest extends CreatubblesRequest<CreatorsFollowingUsersResponse> {
 
     public CreatorsFollowingUsersRequest(String id) {

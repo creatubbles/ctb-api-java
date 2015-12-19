@@ -3,11 +3,9 @@ package com.creatubbles.api.core;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.util.HttpMethod;
 import org.glassfish.jersey.client.JerseyWebTarget;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +20,9 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private Response response;
     private Future<Response> futureResponse;
     private T responseCache;
+    private String accessToken;
     private static final String EMPTY_RESPONSE = "{}";
+    private static final String APPLICATION_VND_API_JSON = "application/vnd.api+json";
 
     public CreatubblesRequest(String endPoint, HttpMethod httpMethod) {
         this(endPoint, httpMethod, null, null);
@@ -44,14 +44,11 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         } else {
             this.urlParameters = new HashMap<String, String>();
         }
-        if (accessToken != null) {
-            this.urlParameters.put("access_token", accessToken);
-        }
+        this.accessToken = accessToken;
     }
 
-    public CreatubblesRequest<T> setAccessToken(String accessToken) {
-        this.urlParameters.put("access_token", accessToken);
-        return this;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getEndPoint() {
@@ -180,17 +177,20 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
                 webTarget = webTarget.queryParam(paramKey, paramValue);
             }
         }
-        HttpAuthenticationFeature basicAuth = HttpAuthenticationFeature.basic("c", "c");
-        webTarget.register(basicAuth);
+        //TODO: return if needed + check if staging
+        //HttpAuthenticationFeature basicAuth = HttpAuthenticationFeature.basic("c", "c");
+        //webTarget.register(basicAuth);
 
         Invocation.Builder invocationBuilder = webTarget
-                .request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
+                .request(APPLICATION_VND_API_JSON)
+                .accept(APPLICATION_VND_API_JSON);
 
         if (acceptLanguage != null && acceptLanguage.length() == 2) {
             invocationBuilder.header("Accept-Language", acceptLanguage.toLowerCase());
         }
-
+        if (accessToken != null && !accessToken.isEmpty()) {
+            invocationBuilder.header("Authorization", "Bearer " + accessToken);
+        }
         if (xSource != null && !xSource.isEmpty()) {
             invocationBuilder.header("X-Source", xSource.toLowerCase());
         }
@@ -198,9 +198,9 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         if (httpMethod == HttpMethod.GET) {
             response = invocationBuilder.get();
         } else if (httpMethod == HttpMethod.POST) {
-            response = invocationBuilder.post(Entity.entity(data, MediaType.APPLICATION_JSON));
+            response = invocationBuilder.post(Entity.entity(data, APPLICATION_VND_API_JSON));
         } else if (httpMethod == HttpMethod.PUT) {
-            response = invocationBuilder.put(Entity.entity(data, MediaType.APPLICATION_JSON));
+            response = invocationBuilder.put(Entity.entity(data, APPLICATION_VND_API_JSON));
         }
 
         return this;
@@ -219,13 +219,15 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         }
 
         Invocation.Builder invocationBuilder = webTarget
-                .request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
+                .request(APPLICATION_VND_API_JSON)
+                .accept(APPLICATION_VND_API_JSON);
 
         if (acceptLanguage != null && acceptLanguage.length() == 2) {
             invocationBuilder.header("Accept-Language", acceptLanguage.toLowerCase());
         }
-
+        if (accessToken != null && !accessToken.isEmpty()) {
+            invocationBuilder.header("Authorization", "Bearer " + accessToken);
+        }
         if (xSource != null && !xSource.isEmpty()) {
             invocationBuilder.header("X-Source", xSource.toLowerCase());
         }
@@ -233,9 +235,9 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         if (httpMethod == HttpMethod.GET) {
             futureResponse = invocationBuilder.async().get();
         } else if (httpMethod == HttpMethod.POST) {
-            futureResponse = invocationBuilder.async().post(Entity.entity(data, MediaType.APPLICATION_JSON));
+            futureResponse = invocationBuilder.async().post(Entity.entity(data, APPLICATION_VND_API_JSON));
         } else if (httpMethod == HttpMethod.PUT) {
-            futureResponse = invocationBuilder.async().put(Entity.entity(data, MediaType.APPLICATION_JSON));
+            futureResponse = invocationBuilder.async().put(Entity.entity(data, APPLICATION_VND_API_JSON));
         }
 
         return this;

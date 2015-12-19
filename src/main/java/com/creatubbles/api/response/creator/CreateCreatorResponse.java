@@ -1,5 +1,6 @@
 package com.creatubbles.api.response.creator;
 
+import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.Creator;
 import com.creatubbles.api.core.CreatubblesResponse;
@@ -8,6 +9,7 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
+@APIVersion(1)
 public class CreateCreatorResponse extends CreatubblesResponse implements JsonDeserializer<CreateCreatorResponse> {
     public Creator creator;
     public CreateCreatorError errors;
