@@ -88,8 +88,7 @@ public class CreatubblesAPI {
 
         File file = new File("C:/dev/1.png");
         byte[] data = Files.readAllBytes(file.toPath());
-        String fileName = System.currentTimeMillis() + "creation.png";
-        UploadS3ImageRequest uploadS3Image = new UploadS3ImageRequest(data, fileName, creationsUploadsResponse.url);
+        UploadS3ImageRequest uploadS3Image = new UploadS3ImageRequest(data, creationsUploadsResponse.url);
         uploadS3Image.execute().getResponse();
         System.out.println("-Finish-");
     }

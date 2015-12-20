@@ -3,7 +3,7 @@ package com.creatubbles.api.request.amazon;
 import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.amazon.UploadS3ImageResponse;
-import com.creatubbles.api.util.MultiPartUtil;
+import com.creatubbles.api.util.HttpUtil;
 
 import java.io.IOException;
 
@@ -15,13 +15,11 @@ public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageRespon
 
     private byte[] data;
     private String url;
-    private String fileName;
 
-    public UploadS3ImageRequest(byte[] data, String fileName, String url) {
+    public UploadS3ImageRequest(byte[] data, String url) {
         super(null, null);
         this.data = data;
         this.url = url;
-        this.fileName = fileName;
     }
 
     @Override
@@ -33,8 +31,7 @@ public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageRespon
     public CreatubblesRequest<UploadS3ImageResponse> execute() {
         resetResponse();
         try {
-            MultiPartUtil multiPart = new MultiPartUtil(url, "UTF-8");
-            multiPart.addFilePart(fileName, data, fileName).finish();
+            HttpUtil.uploadObject(data, url);
         } catch (IOException e) {
             e.printStackTrace();
         }
