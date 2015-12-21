@@ -13,7 +13,7 @@ import java.util.List;
 @APIVersion(2)
 public class GetCreationsResponse extends CreatubblesResponse implements JsonDeserializer<GetCreationsResponse> {
     public int total_pages, total_count;
-    public List creations = new ArrayList();
+    public List<Creation> creations = new ArrayList<Creation>();
 
     @Override
     public GetCreationsResponse deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws
