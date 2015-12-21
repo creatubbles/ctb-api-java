@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 @APIVersion(2)
 public class CreationsUploadsResponse extends CreatubblesResponse implements JsonDeserializer<CreationsUploadsResponse> {
 
+    public int id;
     public String url;
 
     @Override
@@ -24,8 +25,10 @@ public class CreationsUploadsResponse extends CreatubblesResponse implements Jso
         JsonObject data = jsonObject.getAsJsonObject("data");
         if (data != null) {
             JsonObject attributes = data.getAsJsonObject("attributes");
-            if (attributes != null) {
+            JsonElement idE = data.get("id");
+            if (idE != null && attributes != null) {
                 url = attributes.get("url").getAsString();
+                id = idE.getAsInt();
             }
         }
     }

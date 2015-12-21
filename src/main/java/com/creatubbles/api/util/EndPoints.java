@@ -34,6 +34,7 @@ public class EndPoints {
     public static final String USERS = "users";
     public static final String USERS_PROFILE = "users/%s";
     public static final String CREATIONS = "creations";
-    public static final String CREATIONS_UPLOAD = "creations/%s/uploads";
+    public static final String CREATIONS_UPLOADS = "creations/%s/uploads";
+    public static final String PING_CREATIONS_UPLOADS = "uploads/%s";
 
 }

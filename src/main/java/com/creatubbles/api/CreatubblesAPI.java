@@ -6,6 +6,7 @@ import com.creatubbles.api.request.auth.OAuthAccessTokenRequest;
 import com.creatubbles.api.request.creation.CreateCreationRequest;
 import com.creatubbles.api.request.creation.CreationsUploadsRequest;
 import com.creatubbles.api.request.creation.GetCreationsRequest;
+import com.creatubbles.api.request.creation.PingCreationsUploadsRequest;
 import com.creatubbles.api.request.creator.GetCreatorsRequest;
 import com.creatubbles.api.request.user.UserProfileRequest;
 import com.creatubbles.api.response.auth.OAuthAccessTokenResponse;
@@ -46,7 +47,8 @@ public class CreatubblesAPI {
     public final static JerseyClient CLIENT = JerseyClientBuilder
             .createClient()
             .property(ClientProperties.CONNECT_TIMEOUT, 5000)
-            .property(ClientProperties.READ_TIMEOUT, 5000);
+            .property(ClientProperties.READ_TIMEOUT, 5000)
+            .property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, Boolean.TRUE);
 
     public static String buildURL(final String endPoint) {
         String base = staging ? EndPoints.URL_BASE_STAGING : EndPoints.URL_BASE;
@@ -85,11 +87,15 @@ public class CreatubblesAPI {
         CreationsUploadsRequest creationsUploads = new CreationsUploadsRequest(createCreationResponse.creation.id, accessToken);
         CreationsUploadsResponse creationsUploadsResponse = creationsUploads.execute().getResponse();
         System.out.println(creationsUploadsResponse.url);
+        System.out.println(creationsUploadsResponse.id);
 
         File file = new File("C:/dev/1.png");
         byte[] data = Files.readAllBytes(file.toPath());
         UploadS3ImageRequest uploadS3Image = new UploadS3ImageRequest(data, creationsUploadsResponse.url);
         uploadS3Image.execute().getResponse();
+
+        PingCreationsUploadsRequest pingCreationsUploads = new PingCreationsUploadsRequest(creationsUploadsResponse.id, accessToken);
+        pingCreationsUploads.execute().getResponse();
         System.out.println("-Finish-");
     }
 

@@ -10,7 +10,7 @@ import com.creatubbles.api.util.HttpMethod;
 public class CreationsUploadsRequest extends CreatubblesRequest<CreationsUploadsResponse> {
 
     public CreationsUploadsRequest(String creationId, String accessToken) {
-        super(String.format(EndPoints.CREATIONS_UPLOAD, creationId), HttpMethod.POST, accessToken);
+        super(String.format(EndPoints.CREATIONS_UPLOADS, creationId), HttpMethod.POST, accessToken);
     }
 
     @Override
