@@ -45,6 +45,16 @@ public class GetCreationsResponse extends CreatubblesResponse implements JsonDes
                     if (idE != null && attributes != null) {
                         Creation creation = CreatubblesAPI.GSON.fromJson(attributes, Creation.class);
                         creation.id = idE.getAsString();
+                        
+                        JsonObject relationships = obj.getAsJsonObject("relationships");
+                        JsonObject user = relationships.getAsJsonObject("user");
+                        creation.user_id = user.getAsJsonObject("data").getAsJsonPrimitive("id").getAsString();
+                        JsonArray creators = relationships.getAsJsonObject("creators").getAsJsonArray("data");
+                        creation.creator_ids = new String[creators.size()];
+                        for (int j = 0; j < creators.size(); j++) {
+                            creation.creator_ids[j] = creators.get(j).getAsJsonObject().getAsJsonPrimitive("id").getAsString();
+                        }
+
                         creations.add(creation);
                     }
                 }

@@ -7,6 +7,7 @@ public class Image {
     public Map<ImageType, String> links;
 
     public enum ImageType {
+        original,
         full_view,
         list_view_retina,
         list_view,
