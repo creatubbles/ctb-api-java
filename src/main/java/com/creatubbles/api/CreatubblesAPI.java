@@ -22,7 +22,6 @@ import com.creatubbles.api.response.creator.GetCreatorsResponse;
 import com.creatubbles.api.response.gallery.CreateUserGalleryResponse;
 import com.creatubbles.api.response.user.UserProfileResponse;
 import com.creatubbles.api.util.EndPoints;
-import com.creatubbles.test.request.AuthTests;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -63,7 +62,7 @@ public class CreatubblesAPI {
         // Additional examples can be found in the JUnit test files
         
         CreatubblesAPI.setStagingMode(true);
-        String accessToken = AuthTests.getAuthToken();
+        String accessToken = ""; // TODO commit tests AuthTests.getAuthToken();
 
         CreateCreationRequest createCreation = new CreateCreationRequest(accessToken);
         CreateCreationResponse createCreationResponse = createCreation.execute().getResponse();
