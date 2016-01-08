@@ -2,15 +2,20 @@ package com.creatubbles.api.core;
 
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.util.HttpMethod;
+import com.google.gson.JsonSyntaxException;
+
 import org.glassfish.jersey.client.JerseyWebTarget;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+import jersey.repackaged.com.google.common.base.Throwables;
 
 public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private String endPoint, acceptLanguage, data;
@@ -136,7 +141,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     }
 
     public Response getRawResponse() {
-        if (response == null && futureResponse.isDone()) {
+        if (response == null && futureResponse != null && futureResponse.isDone()) {
             try {
                 response = futureResponse.get();
             } catch (InterruptedException e) {
@@ -158,8 +163,21 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
                 if (isSuccessStatus(response) && json.isEmpty()) {
                     json = EMPTY_RESPONSE;
                 }
-                T creatubblesResponse = CreatubblesAPI.GSON.fromJson(json, responseClass);
-                creatubblesResponse.setOriginatingRequest(this);
+                T creatubblesResponse = null;
+                try {
+                    creatubblesResponse = CreatubblesAPI.GSON.fromJson(json, responseClass);
+                } catch (JsonSyntaxException e) { // protect against invalid API returns (for now)
+                    e.printStackTrace();
+                }
+                if (creatubblesResponse == null) {
+                    try {
+                        creatubblesResponse = responseClass.newInstance();
+                    } catch (Exception e) {
+                        Throwables.propagate(e);
+                    }
+                } else {
+                    creatubblesResponse.setOriginatingRequest(this);
+                }
                 responseCache = creatubblesResponse;
             }
         }

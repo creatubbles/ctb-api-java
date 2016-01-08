@@ -7,6 +7,7 @@ import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
 @APIVersion(1)
+@Deprecated
 public class UsersCreatorsRequest extends CreatubblesRequest<UsersCreatorsResponse> {
 
     public UsersCreatorsRequest() {

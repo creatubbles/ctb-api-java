@@ -1,15 +1,20 @@
 package com.creatubbles.api.response.creator;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.Creator;
 import com.creatubbles.api.core.CreatubblesResponse;
-import com.google.gson.*;
-
-import java.lang.reflect.Type;
-import java.util.List;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 @APIVersion(1)
+@Deprecated
 public class CreateCreatorResponse extends CreatubblesResponse implements JsonDeserializer<CreateCreatorResponse> {
     public Creator creator;
     public CreateCreatorError errors;

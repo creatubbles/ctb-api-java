@@ -9,7 +9,6 @@ import com.creatubbles.api.util.HttpMethod;
 @APIVersion(2)
 public class CreateCreationRequest extends CreatubblesRequest<CreateCreationResponse> {
 
-
     public CreateCreationRequest(String accessToken) {
         super(EndPoints.CREATIONS, HttpMethod.POST, accessToken);
     }

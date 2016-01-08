@@ -2,6 +2,7 @@ package com.creatubbles.api.core;
 
 import java.util.List;
 
+@Deprecated
 public class Creator {
     public String id;
     public String name, created_at, avatar_url;

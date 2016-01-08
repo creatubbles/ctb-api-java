@@ -1,15 +1,18 @@
 package com.creatubbles.api;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.JerseyClient;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+
 import com.creatubbles.api.core.Gallery;
 import com.creatubbles.api.request.amazon.UploadS3ImageRequest;
-import com.creatubbles.api.request.auth.OAuthAccessTokenRequest;
 import com.creatubbles.api.request.creation.CreateCreationRequest;
 import com.creatubbles.api.request.creation.CreationsUploadsRequest;
-import com.creatubbles.api.request.creation.GetCreationsRequest;
 import com.creatubbles.api.request.creation.PingCreationsUploadsRequest;
-import com.creatubbles.api.request.creator.GetCreatorsRequest;
-import com.creatubbles.api.request.user.UserProfileRequest;
-import com.creatubbles.api.response.auth.OAuthAccessTokenResponse;
 import com.creatubbles.api.response.auth.SignUpResponse;
 import com.creatubbles.api.response.creation.CreateCreationResponse;
 import com.creatubbles.api.response.creation.CreationsUploadsResponse;
@@ -19,17 +22,12 @@ import com.creatubbles.api.response.creator.GetCreatorsResponse;
 import com.creatubbles.api.response.gallery.CreateUserGalleryResponse;
 import com.creatubbles.api.response.user.UserProfileResponse;
 import com.creatubbles.api.util.EndPoints;
+import com.creatubbles.test.request.AuthTests;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.JerseyClient;
-import org.glassfish.jersey.client.JerseyClientBuilder;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 
+@SuppressWarnings("deprecation")
 public class CreatubblesAPI {
     public final static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(SignUpResponse.class, new SignUpResponse())
@@ -62,23 +60,10 @@ public class CreatubblesAPI {
     }
 
     public static void main(String[] args) throws IOException {
+        // Additional examples can be found in the JUnit test files
+        
         CreatubblesAPI.setStagingMode(true);
-        OAuthAccessTokenRequest request = new OAuthAccessTokenRequest("jevgeni.koltsin@gmail.com", "ccttbb");
-        OAuthAccessTokenResponse response = request.execute().getResponse();
-        String accessToken = response.access_token;
-        System.out.println(accessToken);
-
-        UserProfileRequest userProfileRequest = new UserProfileRequest(accessToken);
-        UserProfileResponse userProfileResponse = userProfileRequest.execute().getResponse();
-        System.out.println(userProfileResponse.user.id);
-
-        GetCreatorsRequest getCreators = new GetCreatorsRequest(userProfileResponse.user.id, accessToken);
-        GetCreatorsResponse getCreatorsResponse = getCreators.execute().getResponse();
-        System.out.println(getCreatorsResponse.creators != null);
-
-        GetCreationsRequest getCreations = new GetCreationsRequest(userProfileResponse.user.id, accessToken);
-        GetCreationsResponse getCreationsResponse = getCreations.execute().getResponse();
-        System.out.println(getCreationsResponse.total_count);
+        String accessToken = AuthTests.getAuthToken();
 
         CreateCreationRequest createCreation = new CreateCreationRequest(accessToken);
         CreateCreationResponse createCreationResponse = createCreation.execute().getResponse();

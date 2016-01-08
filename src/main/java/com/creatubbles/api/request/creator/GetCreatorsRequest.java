@@ -14,7 +14,6 @@ public class GetCreatorsRequest extends CreatubblesRequest<GetCreatorsResponse> 
         setUrlParameter(Params.user_id.name(), userId);
     }
 
-
     @Override
     public Class<? extends GetCreatorsResponse> getResponseClass() {
         return GetCreatorsResponse.class;
