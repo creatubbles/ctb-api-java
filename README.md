@@ -1,3 +1,12 @@
+___
+Receiving the access code
+========
+
+If you want to use the mod you need to authorize your application via client_id and client secret (see: [Creatubbles API documentation](https://stateoftheart.creatubbles.com/api) for more details).
+
+For now you can receive the client_id and client_secret by sending an email request to [support@creatubbles.com](mailto:support@creatubbles.com)
+
+___
 Creatubbles Web Services API
 ========
 
