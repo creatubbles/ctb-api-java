@@ -54,13 +54,15 @@ artifacts {
     archives sourceJar
 }
 
+/*
 uploadArchives {
     onlyIf {
         return project.hasProperty('mavendir')
     }
     repositories {
         mavenDeployer {
-            repository(url: "file://${project.mavendir}")
+            repository(url: 'file://' + project.getProperty('mavendir'))
         }
     }
 }
+*/
