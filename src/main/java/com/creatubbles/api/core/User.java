@@ -1,11 +1,23 @@
 package com.creatubbles.api.core;
 
+import com.creatubbles.api.request.auth.OAuthAccessTokenRequest;
+
 public class User {
     public String id, age, birth_month, birth_year;
     public String username, display_name, email, country, role;
     public boolean is_teacher, is_loggable, is_site_admin, newsletter;
     public int signed_up_as;
+    
+    /**
+     * @see OAuthAccessTokenRequest
+     */
+    @Deprecated
     public String access_token;
+    
+    /**
+     * @see OAuthAccessTokenRequest
+     */
+    @Deprecated
     public String password;
 
     @Override

@@ -60,7 +60,7 @@ uploadArchives {
     }
     repositories {
         mavenDeployer {
-            repository(url: "file://${project.mavendir}")
+            repository(url: 'file://' + project.getProperty('mavendir'))
         }
     }
 }
