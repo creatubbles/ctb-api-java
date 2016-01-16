@@ -1,9 +1,18 @@
-Creatubbles Web Services API	
+___
+Receiving the access code
+========
+
+If you want to use the mod you need to authorize your application via client_id and client secret (see: [Creatubbles API documentation](https://stateoftheart.creatubbles.com/api) for more details).
+
+For now you can receive the client_id and client_secret by sending an email request to [support@creatubbles.com](mailto:support@creatubbles.com)
+
+___
+Creatubbles Web Services API
 ========
 
 A Java library to assist in interations between Java applications and the Creatubbles Web Services API
 
-Please check out the [Wiki](https://github.com/creatubbles/api/wiki) to see the structure of calls to and responses back from the Web Service
+Please check out the [Creatubbles API documentation](https://stateoftheart.creatubbles.com/api) to see the structure of calls to and responses back from the Web Service
 
 ___
 Contributing To This Project
