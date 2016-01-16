@@ -54,7 +54,6 @@ artifacts {
     archives sourceJar
 }
 
-/*
 uploadArchives {
     onlyIf {
         return project.hasProperty('mavendir')
@@ -65,4 +64,3 @@ uploadArchives {
         }
     }
 }
-*/
