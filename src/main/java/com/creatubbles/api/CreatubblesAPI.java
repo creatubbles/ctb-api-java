@@ -2,8 +2,10 @@ package com.creatubbles.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 
+import com.google.gson.*;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -22,8 +24,6 @@ import com.creatubbles.api.response.creator.GetCreatorsResponse;
 import com.creatubbles.api.response.gallery.CreateUserGalleryResponse;
 import com.creatubbles.api.response.user.UserProfileResponse;
 import com.creatubbles.api.util.EndPoints;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 
 @SuppressWarnings("deprecation")
@@ -39,6 +39,7 @@ public class CreatubblesAPI {
             .registerTypeAdapter(GetCreationsResponse.class, new GetCreationsResponse())
             .registerTypeAdapter(CreateCreationResponse.class, new CreateCreationResponse())
             .registerTypeAdapter(CreationsUploadsResponse.class, new CreationsUploadsResponse())
+            .registerTypeAdapter(String.class, new StringAdapter())
             .create();
 
     public final static JerseyClient CLIENT = JerseyClientBuilder
@@ -81,6 +82,16 @@ public class CreatubblesAPI {
         PingCreationsUploadsRequest pingCreationsUploads = new PingCreationsUploadsRequest(creationsUploadsResponse.id, accessToken);
         pingCreationsUploads.execute().getResponse();
         System.out.println("-Finish-");
+    }
+
+    static class StringAdapter implements JsonDeserializer<String> {
+
+        public String deserialize(JsonElement json, Type typeOfT,
+                                  JsonDeserializationContext context)
+                throws JsonParseException {
+            String asString = json.getAsJsonPrimitive().getAsString();
+            return asString != null && asString.isEmpty() ? null : asString;
+        }
     }
 
 }
