@@ -172,6 +172,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
                 if (creatubblesResponse == null) {
                     try {
                         creatubblesResponse = responseClass.newInstance();
+                        creatubblesResponse.message = json;
                     } catch (Exception e) {
                         Throwables.propagate(e);
                     }
