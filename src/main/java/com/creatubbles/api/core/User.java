@@ -4,9 +4,20 @@ import com.creatubbles.api.request.auth.OAuthAccessTokenRequest;
 
 public class User {
     public String id, age, birth_month, birth_year;
-    public String username, display_name, email, country, role;
-    public boolean is_teacher, is_loggable, is_site_admin, newsletter;
+    public String username, display_name, email, role;
+    public String country_code, country_name;
+    public String created_at, short_url, avatar_url;
+    public boolean is_male, is_teacher, is_loggable, is_site_admin, newsletter;
+
+    @Deprecated
     public int signed_up_as;
+
+    /**
+     * @see #country_code
+     * @see #country_name
+     */
+    @Deprecated
+    public String country;
     
     /**
      * @see OAuthAccessTokenRequest
