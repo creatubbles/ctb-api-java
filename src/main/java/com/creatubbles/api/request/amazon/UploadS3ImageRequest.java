@@ -30,16 +30,14 @@ public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageRespon
     @Override
     public CreatubblesRequest<UploadS3ImageResponse> execute() {
         resetResponse();
+        UploadS3ImageResponse response = new UploadS3ImageResponse();
         try {
-            HttpUtil.uploadObject(data, url);
+            response.success = isSuccessStatusCode(HttpUtil.uploadObject(data, url));
+            setResponseCache(response);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return this;
     }
 
-    @Override
-    public UploadS3ImageResponse getResponse() {
-        return new UploadS3ImageResponse();
-    }
 }

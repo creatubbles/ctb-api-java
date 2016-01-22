@@ -131,7 +131,11 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     }
 
     private boolean isSuccessStatus(Response response) {
-        return response.getStatus() == 200 || response.getStatus() ==  204;
+        return isSuccessStatusCode(response.getStatus());
+    }
+
+    public boolean isSuccessStatusCode(int status) {
+        return status == 200 || status ==  204;
     }
 
     public void cancelRequest() {
@@ -265,4 +269,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         this.response = response;
     }
 
+    public void setResponseCache(T responseCache) {
+        this.responseCache = responseCache;
+    }
 }
