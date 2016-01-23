@@ -32,7 +32,7 @@ public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageRespon
         resetResponse();
         UploadS3ImageResponse response = new UploadS3ImageResponse();
         try {
-            response.success = isSuccessStatusCode(HttpUtil.uploadObject(data, url));
+            response.success = isSuccessStatusCode(HttpUtil.uploadObject(data, url, HttpUtil.IMAGE_JPEG_CONTENT_TYPE));
             setResponseCache(response);
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,11 +8,14 @@ import java.net.URL;
 
 public class HttpUtil {
 
-    public static int uploadObject(byte[] data, String url) throws IOException {
+    public static final String IMAGE_JPEG_CONTENT_TYPE = "image/jpeg";
+
+    public static int uploadObject(byte[] data, String url, String  contentType) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) (new URL(url).openConnection());
         connection.setDoOutput(true);
         connection.setUseCaches(false);
         connection.setRequestMethod(HttpMethod.PUT.name());
+        connection.setRequestProperty("Content-Type", contentType);
         OutputStream out = connection.getOutputStream();
         ByteArrayInputStream in = new ByteArrayInputStream(data);
         byte[] buffer = new byte[4096];
