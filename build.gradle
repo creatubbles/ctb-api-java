@@ -31,7 +31,7 @@ if (System.getenv('BUILD_NUMBER') != null) {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-}   
+}
 
 repositories {
     mavenCentral()
@@ -55,12 +55,13 @@ artifacts {
 }
 
 uploadArchives {
+    mavendir = System.getenv('MAVENDIR') ?: project.getProperty('mavendir')
     onlyIf {
-        return project.hasProperty('mavendir')
+        return mavendir
     }
     repositories {
         mavenDeployer {
-            repository(url: 'file://' + project.getProperty('mavendir'))
+            repository(url: 'file://' + mavendir)
         }
     }
 }
