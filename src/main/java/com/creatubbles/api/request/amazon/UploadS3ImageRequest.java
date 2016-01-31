@@ -4,6 +4,7 @@ import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.amazon.UploadS3ImageResponse;
 import com.creatubbles.api.util.HttpUtil;
+import com.creatubbles.api.util.HttpUtil.Response;
 
 import java.io.IOException;
 
@@ -32,12 +33,13 @@ public class UploadS3ImageRequest extends CreatubblesRequest<UploadS3ImageRespon
         resetResponse();
         UploadS3ImageResponse response = new UploadS3ImageResponse();
         try {
-            response.success = isSuccessStatusCode(HttpUtil.uploadObject(data, url, HttpUtil.IMAGE_JPEG_CONTENT_TYPE));
+            Response resp = HttpUtil.uploadObject(data, url, HttpUtil.IMAGE_JPEG_CONTENT_TYPE);
+            response.success = isSuccessStatusCode(resp.code);
+            response.message = resp.message;
             setResponseCache(response);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return this;
     }
-
 }
