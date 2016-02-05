@@ -19,7 +19,6 @@ import jersey.repackaged.com.google.common.base.Throwables;
 
 public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private String endPoint, acceptLanguage, data;
-    private String xSource = "mc-mod";
     private HttpMethod httpMethod;
     private Map<String, String> urlParameters;
     private Response response;
@@ -84,15 +83,6 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
 
     public CreatubblesRequest<T> setAcceptLanguage(String acceptLanguage) {
         this.acceptLanguage = acceptLanguage;
-        return this;
-    }
-
-    public String getXSource() {
-        return xSource;
-    }
-
-    public CreatubblesRequest<T> setXSource(String xSource) {
-        this.xSource = xSource;
         return this;
     }
 
@@ -214,9 +204,6 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         if (accessToken != null && !accessToken.isEmpty()) {
             invocationBuilder.header("Authorization", "Bearer " + accessToken);
         }
-        if (xSource != null && !xSource.isEmpty()) {
-            invocationBuilder.header("X-Source", xSource.toLowerCase());
-        }
 
         if (httpMethod == HttpMethod.GET) {
             response = invocationBuilder.get();
@@ -250,9 +237,6 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         }
         if (accessToken != null && !accessToken.isEmpty()) {
             invocationBuilder.header("Authorization", "Bearer " + accessToken);
-        }
-        if (xSource != null && !xSource.isEmpty()) {
-            invocationBuilder.header("X-Source", xSource.toLowerCase());
         }
 
         if (httpMethod == HttpMethod.GET) {
