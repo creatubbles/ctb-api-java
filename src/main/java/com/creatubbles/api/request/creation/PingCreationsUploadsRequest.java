@@ -12,8 +12,8 @@ import com.creatubbles.api.util.HttpMethod;
 @APIVersion(2)
 public class PingCreationsUploadsRequest extends CreatubblesRequest<PingCreationsUploadsResponse> {
 
-    public PingCreationsUploadsRequest(int uploadId,  String accessToken) {
-        super(String.format(EndPoints.PING_CREATIONS_UPLOADS, uploadId), HttpMethod.PUT, accessToken);
+    public PingCreationsUploadsRequest(String url,  String accessToken) {
+        super(url, HttpMethod.PUT, accessToken);
     }
 
     @Override

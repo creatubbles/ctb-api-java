@@ -1,21 +1,23 @@
-package com.creatubbles.api.response.creation;
+package com.creatubbles.api.response.landingurls;
 
 import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesResponse;
+import com.creatubbles.api.core.LandingUrl;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * Created by Jevgeni on 10.03.2016.
+ */
 @APIVersion(2)
-public class CreationsUploadsResponse extends CreatubblesResponse implements JsonDeserializer<CreationsUploadsResponse> {
+public class GetSpecificLandingUrlResponse extends CreatubblesResponse implements JsonDeserializer<GetSpecificLandingUrlResponse> {
 
-    public int id;
-    public String url;
-    public String content_type;
-    public String ping_url;
+    public LandingUrl url;
 
     @Override
-    public CreationsUploadsResponse deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public GetSpecificLandingUrlResponse deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws
+            JsonParseException {
         if (!jsonElement.isJsonPrimitive()) {
             JsonObject jsonObject = (JsonObject) jsonElement;
             deserializeData(jsonObject);
@@ -29,10 +31,9 @@ public class CreationsUploadsResponse extends CreatubblesResponse implements Jso
             JsonObject attributes = data.getAsJsonObject("attributes");
             JsonElement idE = data.get("id");
             if (idE != null && attributes != null) {
-                url = attributes.get("url").getAsString();
-                content_type = attributes.get("content_type").getAsString();
-                ping_url = attributes.get("ping_url").getAsString();
-                id = idE.getAsInt();
+                url = new LandingUrl();
+                url.type = LandingUrl.LandingUrlType.from(idE.getAsString());
+                url.url = attributes.get("url").getAsString();
             }
         }
     }

@@ -2,9 +2,9 @@ package com.creatubbles.api.util;
 
 public class EndPoints {
 
-    public static final String URL_BASE = "https://www.creatubbles.com/api/v2/";
+    public static final String URL_BASE = "https://api.creatubbles.com/v2/";
 
-    public static final String URL_BASE_STAGING = "https://staging.creatubbles.com/api/v2/";
+    public static final String URL_BASE_STAGING = "https://api.staging.creatubbles.com/v2/";
 
     public static final String SIGN_IN = "users/sign_in.json";
 
@@ -35,6 +35,7 @@ public class EndPoints {
     public static final String USERS_PROFILE = "users/%s";
     public static final String CREATIONS = "creations";
     public static final String CREATIONS_UPLOADS = "creations/%s/uploads";
-    public static final String PING_CREATIONS_UPLOADS = "uploads/%s";
+    public static final String LANDING_URLS = "landing_urls";
+    public static final String SPECIFIC_LANDING_URL = "landing_urls/%s";
 
 }
