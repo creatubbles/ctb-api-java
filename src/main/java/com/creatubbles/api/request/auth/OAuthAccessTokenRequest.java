@@ -42,10 +42,6 @@ public class OAuthAccessTokenRequest extends CreatubblesRequest<OAuthAccessToken
                 .request(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON);
 
-        if (getXSource() != null && !getXSource().isEmpty()) {
-            invocationBuilder.header("X-Source", getXSource().toLowerCase());
-        }
-
         Form form = new Form() //
                 .param("grant_type", "password") //
                 .param("client_id", CLIENT_ID) //
