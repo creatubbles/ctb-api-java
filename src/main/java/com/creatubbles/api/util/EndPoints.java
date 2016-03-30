@@ -36,5 +36,6 @@ public class EndPoints {
     public static final String CREATIONS = "creations";
     public static final String CREATIONS_UPLOADS = "creations/%s/uploads";
     public static final String PING_CREATIONS_UPLOADS = "uploads/%s";
+    public static final String CREATION_LANDING_URL = "creations/%s/landing_url";
 
 }

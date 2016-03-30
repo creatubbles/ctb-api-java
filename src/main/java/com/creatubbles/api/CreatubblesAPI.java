@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 
 import com.google.gson.*;
+
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -19,6 +20,7 @@ import com.creatubbles.api.response.auth.SignUpResponse;
 import com.creatubbles.api.response.creation.CreateCreationResponse;
 import com.creatubbles.api.response.creation.CreationsUploadsResponse;
 import com.creatubbles.api.response.creation.GetCreationsResponse;
+import com.creatubbles.api.response.creation.LandingURLResponse;
 import com.creatubbles.api.response.creator.CreateCreatorResponse;
 import com.creatubbles.api.response.creator.GetCreatorsResponse;
 import com.creatubbles.api.response.gallery.CreateUserGalleryResponse;
@@ -39,6 +41,7 @@ public class CreatubblesAPI {
             .registerTypeAdapter(GetCreationsResponse.class, new GetCreationsResponse())
             .registerTypeAdapter(CreateCreationResponse.class, new CreateCreationResponse())
             .registerTypeAdapter(CreationsUploadsResponse.class, new CreationsUploadsResponse())
+            .registerTypeAdapter(LandingURLResponse.class, new LandingURLResponse())
             .registerTypeAdapter(String.class, new StringAdapter())
             .create();
 
