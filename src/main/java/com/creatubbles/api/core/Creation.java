@@ -9,6 +9,7 @@ public class Creation {
     public String last_bubbled_at, last_commented_at, last_submitted_at;
     public Image image;
     public String short_url;
+    public boolean approved;
 
     @Deprecated
     public Creator[] creators;
