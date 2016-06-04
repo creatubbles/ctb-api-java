@@ -3,7 +3,6 @@ package com.creatubbles.api.request.creation;
 import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.creation.PingCreationsUploadsResponse;
-import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
 /**

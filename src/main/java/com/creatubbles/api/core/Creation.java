@@ -1,28 +1,59 @@
 package com.creatubbles.api.core;
 
-public class Creation {
+import java.util.HashMap;
 
-    public String id, user_id;
-    public String[] creator_ids;
-    public String name, created_at, created_at_age;
-    public int created_at_month, created_at_year, comments_count, bubble_count, views_count;
-    public String last_bubbled_at, last_commented_at, last_submitted_at;
-    public Image image;
-    public String short_url;
-    public boolean approved;
+import jersey.repackaged.com.google.common.collect.Maps;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.Value;
 
-    @Deprecated
-    public Creator[] creators;
-    /**
-     * @see #short_url
-     * @see Image#links
-     */
-    @Deprecated
-    public String store_dir;
-    /**
-     * @see #short_url
-     * @see Image#links
-     */
-    @Deprecated
-    public String url;
+import com.google.gson.annotations.SerializedName;
+
+@Value
+@ToString(callSuper = true)
+public class Creation extends CreatubblesObject {
+  
+    String name;
+    @SerializedName("created_at")
+    String createdDate;
+    @SerializedName("created_at_age")
+    String createdAge;
+    
+    @Getter(value = AccessLevel.NONE)
+    @SerializedName("created_at_age_per_creator")
+    HashMap<String, String> creatorToAgeMap = Maps.newHashMap();
+    
+    public String getCreatedAge(String creatorId) {
+        return creatorToAgeMap.get(creatorId);
+    }
+    
+    public String getCreatedAge(User creator) {
+        return getCreatedAge(creator.getId());
+    }
+    
+    @SerializedName("created_at_month")
+    int createdMonth;
+    @SerializedName("created_at_year")
+    int createdYear;
+    @SerializedName("comments_count")
+    int commentCount;
+    @SerializedName("bubble_count")
+    int bubbleCount;
+    @SerializedName("views_count")
+    int viewCount;
+    
+    @SerializedName("last_bubbled_at")
+    String lastBubbleDate;
+    @SerializedName("last_commented_at")
+    String lastCommentDate;
+    @SerializedName("last_submitted_at")
+    String lastSubmitDate;
+    
+    Image image;
+    
+    @SerializedName("short_url")
+    String shortUrl;
+    
+    boolean approved;
 }

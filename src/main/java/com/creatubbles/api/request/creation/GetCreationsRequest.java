@@ -14,7 +14,7 @@ public class GetCreationsRequest extends CreatubblesRequest<GetCreationsResponse
     }
 
     public GetCreationsRequest(String userId, int page, String accessToken) {
-        super(EndPoints.CREATIONS, HttpMethod.GET, accessToken);
+        super(EndPoints.CREATIONS.getTemplate(), HttpMethod.GET, accessToken);
         setUrlParameter(Params.user_id.name(), userId);
         setUrlParameter(Params.page.name(), String.valueOf(page));
     }

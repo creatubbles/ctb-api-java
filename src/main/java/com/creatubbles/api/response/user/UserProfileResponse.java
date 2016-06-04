@@ -1,33 +1,23 @@
 package com.creatubbles.api.response.user;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import com.creatubbles.api.APIVersion;
-import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.CreatubblesResponse;
 import com.creatubbles.api.core.User;
-import com.google.gson.*;
-
-import java.lang.reflect.Type;
+import com.google.gson.annotations.SerializedName;
 
 @APIVersion(2)
-public class UserProfileResponse extends CreatubblesResponse implements JsonDeserializer<UserProfileResponse> {
-    public User user;
-
+@Getter
+@ToString(callSuper = true)
+public class UserProfileResponse extends CreatubblesResponse {
+    
+    @SerializedName("attributes")
+    private User user;
+    
     @Override
-    public UserProfileResponse deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        UserProfileResponse userProfileResponse = new UserProfileResponse();
-        if (!jsonElement.isJsonPrimitive()) {
-            JsonObject jsonObject = (JsonObject) jsonElement;
-            JsonObject data = jsonObject.getAsJsonObject("data");
-            if (data != null) {
-                JsonObject attributes = data.getAsJsonObject("attributes");
-                JsonElement idE = data.get("id");
-                if (attributes != null && idE != null) {
-                    String id = idE.getAsString();
-                    userProfileResponse.user = CreatubblesAPI.GSON.fromJson(attributes, User.class);
-                    userProfileResponse.user.id = id;
-                }
-            }
-        }
-        return userProfileResponse;
+    public void handleId(String id) {
+        user.setId(id);
     }
 }

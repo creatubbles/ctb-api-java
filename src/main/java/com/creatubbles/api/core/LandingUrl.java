@@ -1,12 +1,15 @@
 package com.creatubbles.api.core;
 
+import lombok.Value;
+
 /**
  * Created by Jevgeni on 10.03.2016.
  */
+@Value
 public class LandingUrl {
 
-    public LandingUrlType type;
-    public String url;
+    LandingUrlType type;
+    String url;
 
     public enum LandingUrlType {
 

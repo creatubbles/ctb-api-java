@@ -1,25 +1,19 @@
 package com.creatubbles.api.core;
 
-import java.util.List;
 import java.util.Map;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@ToString
+@EqualsAndHashCode
 public class Image {
-    /**
-     * @see #links
-     */
-    @Deprecated
-    public String url;
     
-    @Deprecated
-    public List<Creator> creators;
+    private Map<ImageType, String> links;
     
-    /**
-     * @see #links
-     */
-    @Deprecated
-    public String store_dir;
-    
-    public Map<ImageType, String> links;
+    public String getUrl(ImageType type) {
+        return links.get(type);
+    }
 
     public enum ImageType {
         original,

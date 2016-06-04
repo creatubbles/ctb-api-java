@@ -1,29 +1,41 @@
 package com.creatubbles.api.core;
 
-import com.creatubbles.api.CreatubblesAPI;
-import com.creatubbles.api.util.HttpMethod;
-import com.google.gson.JsonSyntaxException;
-
-import org.glassfish.jersey.client.JerseyWebTarget;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import jersey.repackaged.com.google.common.base.Throwables;
+import jersey.repackaged.com.google.common.collect.Lists;
+
+import org.glassfish.jersey.client.JerseyWebTarget;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+
+import com.creatubbles.api.CreatubblesAPI;
+import com.creatubbles.api.response.ArrayResponse;
+import com.creatubbles.api.util.HttpMethod;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
+
     private String endPoint, acceptLanguage, data;
     private HttpMethod httpMethod;
     private Map<String, String> urlParameters;
     private Response response;
     private Future<Response> futureResponse;
+
     private T responseCache;
+    private T[] responseArrayCache;
+    private JsonObject metaCache;
+    
     private String accessToken;
     private static final String EMPTY_RESPONSE = "{}";
     private static final String APPLICATION_VND_API_JSON = "application/vnd.api+json";
@@ -125,7 +137,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     }
 
     public boolean isSuccessStatusCode(int status) {
-        return status == 200 || status ==  204;
+        return status == 200 || status == 204;
     }
 
     public void cancelRequest() {
@@ -148,35 +160,98 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         return response;
     }
 
-    public T getResponse() {
-        if (responseCache == null) {
+    @SuppressWarnings("unchecked")
+    private void initResponse() {
+        if (responseCache == null && responseArrayCache == null) {
             Response response = getRawResponse();
             Class<? extends T> responseClass = getResponseClass();
             if (response != null && responseClass != null) {
                 String json = response.readEntity(String.class);
                 if (isSuccessStatus(response) && json.isEmpty()) {
                     json = EMPTY_RESPONSE;
-                }
-                T creatubblesResponse = null;
-                try {
-                    creatubblesResponse = CreatubblesAPI.GSON.fromJson(json, responseClass);
-                } catch (JsonSyntaxException e) { // protect against invalid API returns (for now)
-                    e.printStackTrace();
-                }
-                if (creatubblesResponse == null) {
-                    try {
-                        creatubblesResponse = responseClass.newInstance();
-                        creatubblesResponse.message = json;
-                    } catch (Exception e) {
-                        Throwables.propagate(e);
-                    }
+                } else if (!isSuccessStatus(response)) {
+                    responseCache = createDefaultResponse(json);
                 } else {
-                    creatubblesResponse.setOriginatingRequest(this);
+                    try {
+                        JsonObject jsonObj = CreatubblesAPI.GSON.fromJson(json, JsonObject.class);
+                        if (isArrayResponse()) {
+                            initResponseArray(jsonObj);
+                        } else {
+                            initResponseSingle(jsonObj);
+                        }
+                        if (jsonObj.has("meta")) {
+                            metaCache = jsonObj.get("meta").getAsJsonObject();
+                        }
+                    } catch (JsonSyntaxException e) { // protect against invalid API returns (for now)
+                        System.err.println("Invalid JSON: " + json);
+                        e.printStackTrace();
+                        boolean isArray = isArrayResponse();
+                        if (isArray && responseArrayCache == null) {
+                            responseArrayCache = (T[]) Array.newInstance(getResponseClass(), 1);
+                            responseArrayCache[0] = createDefaultResponse(json);
+                        } else if (!isArray && responseCache == null) {
+                            responseCache = createDefaultResponse(json);
+                        }
+                    }
                 }
-                responseCache = creatubblesResponse;
             }
         }
+    }
+
+    private void initResponseSingle(JsonObject json) {
+        responseCache = CreatubblesAPI.GSON.fromJson(json, getResponseClass());
+        updateResponse(responseCache, json);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initResponseArray(JsonObject json) {
+        responseArrayCache = (T[]) CreatubblesAPI.GSON.fromJson(json, Array.newInstance(getResponseClass(), 0).getClass());
+        for (int i = 0; i < responseArrayCache.length; i++) {
+            updateResponse(responseArrayCache[i], json);
+        }
+    }
+
+    private void updateResponse(T resp, JsonObject root) {
+        resp.handleId(resp.getId());
+        resp.setOriginatingRequest(this);
+    }
+
+    private T createDefaultResponse(String json) {
+        try {
+            T resp = getResponseClass().newInstance();
+            resp.setMessage(json);
+            return resp;
+        } catch (Exception e) {
+            throw Throwables.propagate(e);
+        }
+    }
+    
+    public final boolean isArrayResponse() {
+        return getResponseClass().isAnnotationPresent(ArrayResponse.class);
+    }
+
+    /**
+     * @return A cached version of the deserialized response object.
+     *         <p>
+     *         {@code null} if the response <i>is</i> marked with {@link ArrayResponse}.
+     */
+    public final T getResponse() {
+        initResponse();
         return responseCache;
+    }
+
+    /**
+     * @return An unmodifiable view of the array response as a list.
+     *         <p>
+     *         {@code null} if the response is not marked with {@link ArrayResponse}.
+     */
+    public final List<T> getResponseList() {
+        initResponse();
+        return responseArrayCache == null ? Lists.<T>newArrayList() : Arrays.asList(responseArrayCache);
+    }
+    
+    public final <M> M getMetadata(Class<M> metaClass) {
+        return CreatubblesAPI.GSON.fromJson(metaCache, metaClass);
     }
 
     public CreatubblesRequest<T> execute() {
@@ -190,13 +265,13 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
                 webTarget = webTarget.queryParam(paramKey, paramValue);
             }
         }
-        //TODO: return if needed + check if staging
-        //HttpAuthenticationFeature basicAuth = HttpAuthenticationFeature.basic("c", "c");
-        //webTarget.register(basicAuth);
 
-        Invocation.Builder invocationBuilder = webTarget
-                .request(APPLICATION_VND_API_JSON)
-                .accept(APPLICATION_VND_API_JSON);
+        if (CreatubblesAPI.stagingModeEnabled()) {
+            HttpAuthenticationFeature basicAuth = HttpAuthenticationFeature.basic("c", "c");
+            webTarget.register(basicAuth);
+        }
+
+        Invocation.Builder invocationBuilder = webTarget.request(APPLICATION_VND_API_JSON).accept(APPLICATION_VND_API_JSON);
 
         if (acceptLanguage != null && acceptLanguage.length() == 2) {
             invocationBuilder.header("Accept-Language", acceptLanguage.toLowerCase());
@@ -228,9 +303,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
             }
         }
 
-        Invocation.Builder invocationBuilder = webTarget
-                .request(APPLICATION_VND_API_JSON)
-                .accept(APPLICATION_VND_API_JSON);
+        Invocation.Builder invocationBuilder = webTarget.request(APPLICATION_VND_API_JSON).accept(APPLICATION_VND_API_JSON);
 
         if (acceptLanguage != null && acceptLanguage.length() == 2) {
             invocationBuilder.header("Accept-Language", acceptLanguage.toLowerCase());
@@ -249,6 +322,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
 
         return this;
     }
+
     public void setResponse(Response response) {
         this.response = response;
     }

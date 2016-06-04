@@ -10,7 +10,7 @@ import com.creatubbles.api.util.HttpMethod;
 public class GetCreatorsRequest extends CreatubblesRequest<GetCreatorsResponse> {
 
     public GetCreatorsRequest(String userId, String token) {
-        super(EndPoints.USERS, HttpMethod.GET, token);
+        super(EndPoints.USERS.getTemplate(), HttpMethod.GET, token);
         setUrlParameter(Params.user_id.name(), userId);
     }
 

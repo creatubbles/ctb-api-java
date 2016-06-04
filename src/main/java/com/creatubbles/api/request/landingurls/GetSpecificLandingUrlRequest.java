@@ -15,7 +15,7 @@ import static com.creatubbles.api.util.EndPoints.SPECIFIC_LANDING_URL;
 public class GetSpecificLandingUrlRequest extends CreatubblesRequest<GetSpecificLandingUrlResponse> {
 
     public GetSpecificLandingUrlRequest(String accessToken, LandingUrl.LandingUrlType type) {
-        super(String.format(SPECIFIC_LANDING_URL, type), HttpMethod.GET, accessToken);
+        super(SPECIFIC_LANDING_URL.format(type), HttpMethod.GET, accessToken);
     }
 
     @Override

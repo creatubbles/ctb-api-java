@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
+import java.util.Map.Entry;
 
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
-import com.creatubbles.api.core.Gallery;
 import com.creatubbles.api.core.LandingUrl;
 import com.creatubbles.api.request.amazon.UploadS3FileRequest;
 import com.creatubbles.api.request.creation.CreateCreationRequest;
@@ -17,44 +17,34 @@ import com.creatubbles.api.request.creation.CreationsUploadsRequest;
 import com.creatubbles.api.request.creation.PingCreationsUploadsRequest;
 import com.creatubbles.api.request.landingurls.GetLandingUrlsRequest;
 import com.creatubbles.api.request.landingurls.GetSpecificLandingUrlRequest;
-import com.creatubbles.api.response.auth.SignUpResponse;
 import com.creatubbles.api.response.creation.CreateCreationResponse;
 import com.creatubbles.api.response.creation.CreationsUploadsResponse;
-import com.creatubbles.api.response.creation.GetCreationsResponse;
-import com.creatubbles.api.response.creator.CreateCreatorResponse;
-import com.creatubbles.api.response.creator.GetCreatorsResponse;
-import com.creatubbles.api.response.gallery.CreateUserGalleryResponse;
-import com.creatubbles.api.response.landingurls.GetCreationLandingUrlResponse;
 import com.creatubbles.api.response.landingurls.GetLandingUrlsResponse;
 import com.creatubbles.api.response.landingurls.GetSpecificLandingUrlResponse;
-import com.creatubbles.api.response.user.UserProfileResponse;
-import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 
-@SuppressWarnings("deprecation")
 public class CreatubblesAPI {
+
+
+    public static final String URL_BASE = "https://api.creatubbles.com/v2/";
+    public static final String URL_BASE_STAGING = "https://api.staging.creatubbles.com/v2/";
+    
     public final static Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(SignUpResponse.class, new SignUpResponse())
-            .registerTypeAdapter(UserProfileResponse.class, new UserProfileResponse())
-            .registerTypeAdapter(CreateCreatorResponse.class, new CreateCreatorResponse())
-            .registerTypeAdapter(CreateUserGalleryResponse.class, new CreateUserGalleryResponse())
-            .registerTypeAdapter(CreateUserGalleryResponse.class, new CreateUserGalleryResponse())
-            .registerTypeAdapter(Gallery.class, new Gallery())
-            .registerTypeAdapter(GetCreatorsResponse.class, new GetCreatorsResponse())
-            .registerTypeAdapter(GetCreationsResponse.class, new GetCreationsResponse())
-            .registerTypeAdapter(CreateCreationResponse.class, new CreateCreationResponse())
-            .registerTypeAdapter(CreationsUploadsResponse.class, new CreationsUploadsResponse())
-            .registerTypeAdapter(GetLandingUrlsResponse.class, new GetLandingUrlsResponse())
-            .registerTypeAdapter(GetSpecificLandingUrlResponse.class, new GetSpecificLandingUrlResponse())
-            .registerTypeAdapter(GetCreationLandingUrlResponse.class, new GetCreationLandingUrlResponse())
             .registerTypeAdapter(String.class, new StringAdapter())
+            .registerTypeAdapterFactory(new JsonHackx())
             .create();
 
     public final static JerseyClient CLIENT = JerseyClientBuilder
@@ -63,11 +53,12 @@ public class CreatubblesAPI {
             .property(ClientProperties.READ_TIMEOUT, 5000)
             .property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, Boolean.TRUE);
 
-    public static String buildURL(final String endPoint) {
+    public static String buildURL(final Object end) {
+        String endPoint = end.toString();
         if (endPoint.startsWith("https://")) {
             return endPoint;
         }
-        String base = staging ? EndPoints.URL_BASE_STAGING : EndPoints.URL_BASE;
+        String base = staging ? URL_BASE_STAGING : URL_BASE;
         return base.concat(endPoint);
     }
 
@@ -75,6 +66,10 @@ public class CreatubblesAPI {
 
     public static void setStagingMode(boolean staging) {
         CreatubblesAPI.staging = staging;
+    }
+
+    public static boolean stagingModeEnabled() {
+        return staging;
     }
 
     public static void main(String[] args) throws IOException {
@@ -85,38 +80,38 @@ public class CreatubblesAPI {
 
         CreateCreationRequest createCreation = new CreateCreationRequest(accessToken);
         CreateCreationResponse createCreationResponse = createCreation.execute().getResponse();
-        System.out.println(createCreationResponse.creation.id);
+        System.out.println(createCreationResponse.getCreation().getId());
 
         File file = new File("C:/dev/1.png");
         String extension = HttpUtil.getExtension(file.getPath());
 
-        CreationsUploadsRequest creationsUploads = new CreationsUploadsRequest(createCreationResponse.creation.id, extension, accessToken);
+        CreationsUploadsRequest creationsUploads = new CreationsUploadsRequest(createCreationResponse.getCreation().getId(), extension, accessToken);
         CreationsUploadsResponse creationsUploadsResponse = creationsUploads.execute().getResponse();
-        System.out.println(creationsUploadsResponse.url);
-        System.out.println(creationsUploadsResponse.id);
+        System.out.println(creationsUploadsResponse.getUrl());
+        System.out.println(creationsUploadsResponse.getId());
 
         GetLandingUrlsRequest getLandingUrls = new GetLandingUrlsRequest(accessToken);
-        for (LandingUrl landingUrl : getLandingUrls.execute().getResponse().urls) {
-            System.out.println(landingUrl.type + ":" + landingUrl.url);
+        for (GetLandingUrlsResponse landingUrl : getLandingUrls.execute().getResponseList()) {
+            System.out.println(landingUrl.getUrl().getType() + ":" + landingUrl.getUrl().getUrl());
         }
 
         GetSpecificLandingUrlRequest getSpecificLandingUrl = new GetSpecificLandingUrlRequest(accessToken, LandingUrl.LandingUrlType.CTB_USER_PROFILE);
         GetSpecificLandingUrlResponse getSpecificLandingUrlResponse = getSpecificLandingUrl.execute().getResponse();
-        LandingUrl url = getSpecificLandingUrlResponse.url;
-        System.out.println("specific url - " + url.type + ":" + url.url);
+        LandingUrl url = getSpecificLandingUrlResponse.getUrl();
+        System.out.println("specific url - " + url.getType() + ":" + url.getUrl());
 
         byte[] data = Files.readAllBytes(file.toPath());
 
-        UploadS3FileRequest uploadS3Image = new UploadS3FileRequest(data, creationsUploadsResponse.url, creationsUploadsResponse.content_type);
+        UploadS3FileRequest uploadS3Image = new UploadS3FileRequest(data, creationsUploadsResponse.getUrl(), creationsUploadsResponse.getType());
         uploadS3Image.execute().getResponse();
 
-        PingCreationsUploadsRequest pingCreationsUploads = new PingCreationsUploadsRequest(creationsUploadsResponse.ping_url, accessToken);
+        PingCreationsUploadsRequest pingCreationsUploads = new PingCreationsUploadsRequest(creationsUploadsResponse.getPingUrl(), accessToken);
         pingCreationsUploads.setData("");
         pingCreationsUploads.execute().getResponse();
         System.out.println("-Finish-");
     }
 
-    static class StringAdapter implements JsonDeserializer<String> {
+    private static class StringAdapter implements JsonDeserializer<String> {
 
         public String deserialize(JsonElement json, Type typeOfT,
                                   JsonDeserializationContext context)
@@ -125,5 +120,49 @@ public class CreatubblesAPI {
             return asString != null && asString.isEmpty() ? null : asString;
         }
     }
+    
+    private static class JsonHackx implements TypeAdapterFactory {
 
+        @Override
+        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+
+            final TypeAdapter<T> adapter = gson.getDelegateAdapter(this, type);
+            final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+
+            TypeAdapter<T> result = new TypeAdapter<T>() {
+
+                @Override
+                public void write(JsonWriter out, T value) throws IOException {
+                    JsonObject object = adapter.toJsonTree(value).getAsJsonObject();
+                    elementAdapter.write(out, object);
+                }
+
+                @Override public T read(JsonReader in) throws IOException {
+                    JsonElement e = elementAdapter.read(in);
+                    
+                    // Enter into all "data" fields immediately
+                    if (e.isJsonObject() && e.getAsJsonObject().has("data")) {
+                        e = e.getAsJsonObject().get("data");
+                    }
+                    
+                    // Add all "attributes" fields to the parent object so they are accessible without indirection
+                    // Yeah this is a massive hack but it is necessary for things like landing URLs which only
+                    // serve a single string inside the attributes
+                    if (e.isJsonObject()) {
+                        JsonObject obj = e.getAsJsonObject();
+                        if (obj.has("attributes")) {
+                            JsonObject attr = obj.get("attributes").getAsJsonObject();
+                            for (Entry<String, JsonElement> entry : attr.entrySet()) {
+                                obj.add(entry.getKey(), entry.getValue());
+                            }
+                        }
+                    }
+                    
+                    return adapter.fromJsonTree(e);
+                }
+            }.nullSafe(); // so we don't have to check for null on the stream
+
+            return result;
+        }
+    }
 }

@@ -14,7 +14,7 @@ import static com.creatubbles.api.util.EndPoints.LANDING_URLS;
 public class GetLandingUrlsRequest extends CreatubblesRequest<GetLandingUrlsResponse> {
 
     public GetLandingUrlsRequest(String accessToken) {
-        super(LANDING_URLS, HttpMethod.GET, accessToken);
+        super(LANDING_URLS.getTemplate(), HttpMethod.GET, accessToken);
     }
 
     @Override

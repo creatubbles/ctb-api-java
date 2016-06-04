@@ -10,11 +10,11 @@ import com.creatubbles.api.util.HttpMethod;
 public class UserProfileRequest extends CreatubblesRequest<UserProfileResponse> {
 
     public UserProfileRequest(String accessToken) {
-        super(String.format(EndPoints.USERS_PROFILE, "me"), HttpMethod.GET, accessToken);
+        this("me", accessToken);
     }
 
     public UserProfileRequest(String id, String accessToken) {
-        super(String.format(EndPoints.USERS_PROFILE, id), HttpMethod.GET, accessToken);
+        super(EndPoints.USERS_PROFILE.format(id), HttpMethod.GET, accessToken);
     }
 
     @Override

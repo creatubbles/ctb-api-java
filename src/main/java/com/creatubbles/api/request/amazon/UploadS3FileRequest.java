@@ -36,8 +36,8 @@ public class UploadS3FileRequest extends CreatubblesRequest<UploadS3FileResponse
         UploadS3FileResponse response = new UploadS3FileResponse();
         try {
             Response resp = HttpUtil.uploadObject(data, url, contentType);
-            response.success = isSuccessStatusCode(resp.code);
-            response.message = resp.message;
+            response = new UploadS3FileResponse(isSuccessStatusCode(resp.code));
+            response.setMessage(resp.message);
             setResponseCache(response);
         } catch (IOException e) {
             e.printStackTrace();

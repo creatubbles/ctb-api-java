@@ -10,7 +10,7 @@ import com.creatubbles.api.util.HttpMethod;
 public class CreateCreationRequest extends CreatubblesRequest<CreateCreationResponse> {
 
     public CreateCreationRequest(String accessToken) {
-        super(EndPoints.CREATIONS, HttpMethod.POST, accessToken);
+        super(EndPoints.CREATIONS.getTemplate(), HttpMethod.POST, accessToken);
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.creatubbles.api.util.HttpMethod;
 public class GetCreationLandingUrlRequest extends CreatubblesRequest<GetCreationLandingUrlResponse> {
 
     public GetCreationLandingUrlRequest(String creationId, String accessToken) {
-        super(String.format(EndPoints.CREATION_LANDING_URL, creationId), HttpMethod.GET, accessToken);
+        super(EndPoints.CREATION_LANDING_URL.format(creationId), HttpMethod.GET, accessToken);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class CreationsUploadsRequest extends CreatubblesRequest<CreationsUploads
     private String extension;
 
     public CreationsUploadsRequest(String creationId, String extension, String accessToken) {
-        super(String.format(EndPoints.CREATIONS_UPLOADS, creationId), HttpMethod.POST, accessToken);
+        super(EndPoints.CREATIONS_UPLOADS.format(creationId), HttpMethod.POST, accessToken);
         this.extension = extension;
         setUrlParameter("extension", extension);
     }
@@ -28,7 +28,7 @@ public class CreationsUploadsRequest extends CreatubblesRequest<CreationsUploads
         if (extension == null || !HttpUtil.allowedFileTypes.contains(extension)) {
             resetResponse();
             CreationsUploadsResponse response = new CreationsUploadsResponse();
-            response.message = String.format("Invalid file with type %s", extension);
+            response.setMessage(String.format("Invalid file with type %s", extension));
             setResponseCache(response);
             return this;
         }
