@@ -10,6 +10,7 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
+import com.creatubbles.api.core.Gallery;
 import com.creatubbles.api.core.LandingUrl;
 import com.creatubbles.api.request.amazon.UploadS3FileRequest;
 import com.creatubbles.api.request.creation.CreateCreationRequest;
@@ -43,8 +44,9 @@ public class CreatubblesAPI {
     public static final String URL_BASE_STAGING = "https://api.staging.creatubbles.com/v2/";
     
     public final static Gson GSON = new GsonBuilder()
+    		.registerTypeAdapter(Gallery.class, new Gallery.Serializer())
             .registerTypeAdapter(String.class, new StringAdapter())
-            .registerTypeAdapterFactory(new JsonHackx())
+            .registerTypeAdapterFactory(new JsonHacks())
             .create();
 
     public final static JerseyClient CLIENT = JerseyClientBuilder
@@ -121,7 +123,7 @@ public class CreatubblesAPI {
         }
     }
     
-    private static class JsonHackx implements TypeAdapterFactory {
+    private static class JsonHacks implements TypeAdapterFactory {
 
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {

@@ -13,13 +13,13 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.base.Throwables;
-import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.glassfish.jersey.client.JerseyWebTarget;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.response.ArrayResponse;
+import com.creatubbles.api.response.meta.Metadata;
 import com.creatubbles.api.util.HttpMethod;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -35,7 +35,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private T responseCache;
     private T[] responseArrayCache;
     private JsonObject metaCache;
-    
+
     private String accessToken;
     private static final String EMPTY_RESPONSE = "{}";
     private static final String APPLICATION_VND_API_JSON = "application/vnd.api+json";
@@ -225,7 +225,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
             throw Throwables.propagate(e);
         }
     }
-    
+
     public final boolean isArrayResponse() {
         return getResponseClass().isAnnotationPresent(ArrayResponse.class);
     }
@@ -247,10 +247,10 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
      */
     public final List<T> getResponseList() {
         initResponse();
-        return responseArrayCache == null ? Lists.<T>newArrayList() : Arrays.asList(responseArrayCache);
+        return responseArrayCache == null ? null : Arrays.asList(responseArrayCache);
     }
-    
-    public final <M> M getMetadata(Class<M> metaClass) {
+
+    public final <M extends Metadata> M getMetadata(Class<M> metaClass) {
         return CreatubblesAPI.GSON.fromJson(metaCache, metaClass);
     }
 

@@ -5,7 +5,7 @@ import lombok.Value;
 import com.google.gson.annotations.SerializedName;
 
 @Value
-public class MetaPagination {
+public class MetaPagination implements Metadata {
 
     @SerializedName("total_count")
     int objectCount;
