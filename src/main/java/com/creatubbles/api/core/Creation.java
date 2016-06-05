@@ -7,11 +7,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 import com.google.gson.annotations.SerializedName;
 
 @Value
 @ToString(callSuper = true)
+@NonFinal
 public class Creation extends CreatubblesObject {
   
     String name;

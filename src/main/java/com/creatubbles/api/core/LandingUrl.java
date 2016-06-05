@@ -1,11 +1,13 @@
 package com.creatubbles.api.core;
 
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 /**
  * Created by Jevgeni on 10.03.2016.
  */
 @Value
+@NonFinal
 public class LandingUrl {
 
     LandingUrlType type;

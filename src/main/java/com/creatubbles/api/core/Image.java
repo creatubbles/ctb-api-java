@@ -4,9 +4,11 @@ import java.util.Map;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.NonFinal;
 
 @ToString
 @EqualsAndHashCode
+@NonFinal
 public class Image {
     
     private Map<ImageType, String> links;

@@ -2,11 +2,13 @@ package com.creatubbles.api.core;
 
 import lombok.ToString;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 import com.google.gson.annotations.SerializedName;
 
 @Value
 @ToString(callSuper = true)
+@NonFinal
 public class User extends CreatubblesObject {
     
     String age;
