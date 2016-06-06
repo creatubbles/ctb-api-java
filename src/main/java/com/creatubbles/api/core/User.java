@@ -1,38 +1,38 @@
 package com.creatubbles.api.core;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
-import lombok.Value;
-import lombok.experimental.NonFinal;
 
 import com.google.gson.annotations.SerializedName;
 
-@Value
 @ToString(callSuper = true)
-@NonFinal
+@EqualsAndHashCode
+@Getter
 public class User extends CreatubblesObject {
     
-    String age;
+    private String age;
     @SerializedName("birth_month")
-    String birthMonth;
+    private String birthMonth;
     @SerializedName("birth_year")
-    String birthYear;
+    private String birthYear;
     
-    String username;
+    private String username;
     @SerializedName("display_name")
-    String displayName;
-    String email, role;
+    private String displayName;
+    private String email, role;
     
     @SerializedName("country_code")
-    String countryCode;
+    private String countryCode;
     @SerializedName("country_name")
-    String countryName;
+    private String countryName;
     
     @SerializedName("created_at")
-    String createdDate;
+    private String createdDate;
     @SerializedName("short_url")
-    String shortUrl;
+    private String shortUrl;
     @SerializedName("avatar_url")
-    String avatarUrl;
+    private String avatarUrl;
     
-    String gender, interests;
+    private String gender, interests;
 }

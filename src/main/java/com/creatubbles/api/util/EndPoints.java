@@ -9,6 +9,7 @@ public enum EndPoints implements EndPoint {
     OAUTH_TOKEN("oauth/token"),
     USERS("users"),
     USERS_PROFILE("users/%s"),
+    CREATION("creations/%s"),
     CREATIONS("creations"),
     CREATIONS_UPLOADS("creations/%s/uploads"),
     PING_CREATIONS_UPLOADS("uploads/%s"),

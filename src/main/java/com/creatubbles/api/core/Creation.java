@@ -4,27 +4,26 @@ import java.util.HashMap;
 
 import jersey.repackaged.com.google.common.collect.Maps;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.Value;
-import lombok.experimental.NonFinal;
 
 import com.google.gson.annotations.SerializedName;
 
-@Value
 @ToString(callSuper = true)
-@NonFinal
+@EqualsAndHashCode
+@Getter
 public class Creation extends CreatubblesObject {
   
-    String name;
+    private String name;
     @SerializedName("created_at")
-    String createdDate;
+    private String createdDate;
     @SerializedName("created_at_age")
-    String createdAge;
+    private String createdAge;
     
     @Getter(value = AccessLevel.NONE)
     @SerializedName("created_at_age_per_creator")
-    HashMap<String, String> creatorToAgeMap = Maps.newHashMap();
+    private HashMap<String, String> creatorToAgeMap = Maps.newHashMap();
     
     public String getCreatedAge(String creatorId) {
         return creatorToAgeMap.get(creatorId);
@@ -35,27 +34,27 @@ public class Creation extends CreatubblesObject {
     }
     
     @SerializedName("created_at_month")
-    int createdMonth;
+    private int createdMonth;
     @SerializedName("created_at_year")
-    int createdYear;
+    private int createdYear;
     @SerializedName("comments_count")
-    int commentCount;
+    private int commentCount;
     @SerializedName("bubble_count")
-    int bubbleCount;
+    private int bubbleCount;
     @SerializedName("views_count")
-    int viewCount;
+    private int viewCount;
     
     @SerializedName("last_bubbled_at")
-    String lastBubbleDate;
+    private String lastBubbleDate;
     @SerializedName("last_commented_at")
-    String lastCommentDate;
+    private String lastCommentDate;
     @SerializedName("last_submitted_at")
-    String lastSubmitDate;
+    private String lastSubmitDate;
     
-    Image image;
+    private Image image;
     
     @SerializedName("short_url")
-    String shortUrl;
+    private String shortUrl;
     
-    boolean approved;
+    private boolean approved;
 }

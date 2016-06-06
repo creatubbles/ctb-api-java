@@ -1,13 +1,15 @@
 package com.creatubbles.api.core;
 
-import lombok.Value;
-import lombok.experimental.NonFinal;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Created by Jevgeni on 10.03.2016.
  */
-@Value
-@NonFinal
+@ToString
+@EqualsAndHashCode
+@Getter
 public class LandingUrl {
 
     LandingUrlType type;

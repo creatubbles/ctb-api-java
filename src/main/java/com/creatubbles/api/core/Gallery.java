@@ -3,7 +3,9 @@ package com.creatubbles.api.core;
 import java.lang.reflect.Type;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,26 +13,28 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.SerializedName;
 
-@Value
+@ToString(callSuper = true)
+@EqualsAndHashCode
 @Builder
+@Getter
 public class Gallery {
 
-    int id;
-    String name, description;
+    private int id;
+    private String name, description;
 
     @SerializedName("type")
-    String type;
+    private String type;
     @SerializedName("created_at")
-    String createdDate;
-    Image banner;
+    private String createdDate;
+    private Image banner;
 
     @SerializedName("open_for_all")
-    boolean openForAll;
+    private boolean openForAll;
 
     @SerializedName("owner_id")
-    int ownerId;
+    private int ownerId;
     @SerializedName("owner_type")
-    String ownerType;
+    private String ownerType;
 
     public static class Serializer implements JsonSerializer<Gallery> {
 

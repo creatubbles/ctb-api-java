@@ -3,12 +3,12 @@ package com.creatubbles.api.core;
 import java.util.Map;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
-import lombok.experimental.NonFinal;
 
 @ToString
 @EqualsAndHashCode
-@NonFinal
+@Getter
 public class Image {
     
     private Map<ImageType, String> links;
