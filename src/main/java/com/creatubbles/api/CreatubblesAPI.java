@@ -135,8 +135,8 @@ public class CreatubblesAPI {
 
                 @Override
                 public void write(JsonWriter out, T value) throws IOException {
-                    JsonObject object = adapter.toJsonTree(value).getAsJsonObject();
-                    elementAdapter.write(out, object);
+                    JsonElement ele = adapter.toJsonTree(value);
+                    elementAdapter.write(out, ele);
                 }
 
                 @Override public T read(JsonReader in) throws IOException {
