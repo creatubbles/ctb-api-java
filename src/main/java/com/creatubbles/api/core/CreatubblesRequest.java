@@ -200,18 +200,18 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
 
     private void initResponseSingle(JsonObject json) {
         responseCache = CreatubblesAPI.GSON.fromJson(json, getResponseClass());
-        updateResponse(responseCache, json);
+        updateResponse(responseCache);
     }
 
     @SuppressWarnings("unchecked")
     private void initResponseArray(JsonObject json) {
         responseArrayCache = (T[]) CreatubblesAPI.GSON.fromJson(json, Array.newInstance(getResponseClass(), 0).getClass());
         for (int i = 0; i < responseArrayCache.length; i++) {
-            updateResponse(responseArrayCache[i], json);
+            updateResponse(responseArrayCache[i]);
         }
     }
 
-    private void updateResponse(T resp, JsonObject root) {
+    private void updateResponse(T resp) {
         resp.handleId(resp.getId());
         resp.setOriginatingRequest(this);
     }
