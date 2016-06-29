@@ -52,7 +52,7 @@ public class CreatubblesAPI {
     public final static JerseyClient CLIENT = JerseyClientBuilder
             .createClient()
             .property(ClientProperties.CONNECT_TIMEOUT, 5000)
-            .property(ClientProperties.READ_TIMEOUT, 5000)
+            .property(ClientProperties.READ_TIMEOUT, 20000)
             .property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, Boolean.TRUE);
 
     public static String buildURL(final Object end) {
