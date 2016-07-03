@@ -150,7 +150,9 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         if (response == null && futureResponse != null && futureResponse.isDone()) {
             try {
                 response = futureResponse.get();
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
                 e.printStackTrace();
             }
         }
