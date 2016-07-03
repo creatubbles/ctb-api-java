@@ -140,8 +140,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     }
 
     public void cancelRequest() {
-        //possible npe?
-        if (futureResponse != null & !futureResponse.isDone()) {
+        if (futureResponse != null && !futureResponse.isDone()) {
             futureResponse.cancel(true);
         }
     }
