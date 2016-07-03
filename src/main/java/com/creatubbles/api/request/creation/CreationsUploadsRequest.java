@@ -1,13 +1,11 @@
 package com.creatubbles.api.request.creation;
 
-import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.creation.CreationsUploadsResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 import com.creatubbles.api.util.HttpUtil;
 
-@APIVersion(2)
 public class CreationsUploadsRequest extends CreatubblesRequest<CreationsUploadsResponse> {
 
     private String extension;

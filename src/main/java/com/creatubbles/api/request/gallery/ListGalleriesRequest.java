@@ -1,12 +1,10 @@
 package com.creatubbles.api.request.gallery;
 
-import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.gallery.ListGalleriesResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-@APIVersion(2)
 public class ListGalleriesRequest extends CreatubblesRequest<ListGalleriesResponse> {
 
     public ListGalleriesRequest(String id, boolean creation) {

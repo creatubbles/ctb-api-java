@@ -7,14 +7,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.JerseyWebTarget;
 
-import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.auth.OAuthAccessTokenResponse;
 
 import static com.creatubbles.api.util.EndPoints.OAUTH_TOKEN;
 
-@APIVersion(2)
 public class OAuthAccessTokenRequest extends CreatubblesRequest<OAuthAccessTokenResponse> {
 
     private final String clientId, clientSecret;

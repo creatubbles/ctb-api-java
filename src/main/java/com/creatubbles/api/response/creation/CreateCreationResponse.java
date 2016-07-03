@@ -2,12 +2,10 @@ package com.creatubbles.api.response.creation;
 
 import lombok.Getter;
 
-import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.Creation;
 import com.creatubbles.api.core.CreatubblesResponse;
 import com.google.gson.annotations.SerializedName;
 
-@APIVersion(2)
 @Getter
 public class CreateCreationResponse extends CreatubblesResponse {
 

@@ -1,6 +1,5 @@
 package com.creatubbles.api.request.amazon;
 
-import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.response.amazon.UploadS3FileResponse;
 import com.creatubbles.api.util.HttpUtil;
@@ -11,7 +10,6 @@ import java.io.IOException;
 /**
  * Created by Jevgeni on 28.10.2015.
  */
-@APIVersion(2)
 public class UploadS3FileRequest extends CreatubblesRequest<UploadS3FileResponse> {
 
     private byte[] data;

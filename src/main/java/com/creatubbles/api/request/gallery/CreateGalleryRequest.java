@@ -1,6 +1,5 @@
 package com.creatubbles.api.request.gallery;
 
-import com.creatubbles.api.APIVersion;
 import com.creatubbles.api.CreatubblesAPI;
 import com.creatubbles.api.core.CreatubblesRequest;
 import com.creatubbles.api.core.Gallery;
@@ -8,7 +7,6 @@ import com.creatubbles.api.response.gallery.CreateGalleryResponse;
 import com.creatubbles.api.util.EndPoints;
 import com.creatubbles.api.util.HttpMethod;
 
-@APIVersion(2)
 public class CreateGalleryRequest extends CreatubblesRequest<CreateGalleryResponse> {
 
     public CreateGalleryRequest(Gallery gallery, String accessToken) {
