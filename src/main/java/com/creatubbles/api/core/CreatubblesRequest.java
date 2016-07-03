@@ -2,7 +2,7 @@ package com.creatubbles.api.core;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -37,7 +37,6 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     private JsonObject metaCache;
 
     private String accessToken;
-    private static final String EMPTY_RESPONSE = "{}";
     private static final String APPLICATION_VND_API_JSON = "application/vnd.api+json";
 
     public CreatubblesRequest(String endPoint, HttpMethod httpMethod) {
@@ -58,7 +57,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         if (urlParameters != null) {
             this.urlParameters = urlParameters;
         } else {
-            this.urlParameters = new HashMap<String, String>();
+            this.urlParameters = Collections.emptyMap();
         }
         this.accessToken = accessToken;
     }
@@ -137,10 +136,11 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     }
 
     public boolean isSuccessStatusCode(int status) {
-        return status == 200 || status == 204;
+        return status == Response.Status.OK.getStatusCode() || status == Response.Status.CREATED.getStatusCode();
     }
 
     public void cancelRequest() {
+        //possible npe?
         if (futureResponse != null & !futureResponse.isDone()) {
             futureResponse.cancel(true);
         }
@@ -150,9 +150,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         if (response == null && futureResponse != null && futureResponse.isDone()) {
             try {
                 response = futureResponse.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
@@ -167,9 +165,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
             Class<? extends T> responseClass = getResponseClass();
             if (response != null && responseClass != null) {
                 String json = response.readEntity(String.class);
-                if (isSuccessStatus(response) && json.isEmpty()) {
-                    json = EMPTY_RESPONSE;
-                } else if (!isSuccessStatus(response)) {
+                if (!isSuccessStatus(response)) {
                     responseCache = createDefaultResponse(json);
                 } else {
                     try {
@@ -206,8 +202,8 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
     @SuppressWarnings("unchecked")
     private void initResponseArray(JsonObject json) {
         responseArrayCache = (T[]) CreatubblesAPI.GSON.fromJson(json, Array.newInstance(getResponseClass(), 0).getClass());
-        for (int i = 0; i < responseArrayCache.length; i++) {
-            updateResponse(responseArrayCache[i]);
+        for (T aResponseArrayCache : responseArrayCache) {
+            updateResponse(aResponseArrayCache);
         }
     }
 
