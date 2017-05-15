@@ -2,7 +2,6 @@ package com.creatubbles.api.core;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -13,6 +12,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.base.Throwables;
+import jersey.repackaged.com.google.common.collect.Maps;
 
 import org.glassfish.jersey.client.JerseyWebTarget;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -28,7 +28,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
 
     private String endPoint, acceptLanguage, data;
     private HttpMethod httpMethod;
-    private Map<String, String> urlParameters;
+    private final Map<String, String> urlParameters = Maps.newHashMap();
     private Response response;
     private Future<Response> futureResponse;
 
@@ -55,9 +55,7 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
         this.endPoint = endPoint;
         this.httpMethod = httpMethod;
         if (urlParameters != null) {
-            this.urlParameters = urlParameters;
-        } else {
-            this.urlParameters = Collections.emptyMap();
+            this.urlParameters.putAll(urlParameters);
         }
         this.accessToken = accessToken;
     }
