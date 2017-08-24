@@ -261,11 +261,6 @@ public abstract class CreatubblesRequest<T extends CreatubblesResponse> {
             }
         }
 
-        if (CreatubblesAPI.stagingModeEnabled()) {
-            HttpAuthenticationFeature basicAuth = HttpAuthenticationFeature.basic("c", "c");
-            webTarget.register(basicAuth);
-        }
-
         Invocation.Builder invocationBuilder = webTarget.request(APPLICATION_VND_API_JSON).accept(APPLICATION_VND_API_JSON);
 
         if (acceptLanguage != null && acceptLanguage.length() == 2) {
