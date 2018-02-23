@@ -19,7 +19,7 @@ public class HttpUtil {
         public int code;
     }
 
-    public static final List<String> allowedFileTypes = Arrays.asList("png", "jpg", "jpeg", "h264", "mpeg4", "wmv", "webm", "flv", "ogg", "ogv", "mp4", "m4v", "f4v", "mov", "zip");
+    public static final List<String> allowedFileTypes = Arrays.asList("png", "gif", "jpg", "jpeg", "h264", "mpeg4", "wmv", "webm", "flv", "ogg", "ogv", "mp4", "m4v", "f4v", "mov", "zip");
 
     public static Response uploadObject(byte[] data, String url, String mimeType) throws IOException {
         HttpURLConnection connection = null;
